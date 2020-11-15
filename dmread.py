@@ -2,8 +2,16 @@ from pylibdmtx.pylibdmtx import decode,encode
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+import glob
+imgs = glob.glob('96DM/*.png')
+originals = [i[5:15] for i in imgs]
+
 
 plate = cv2.imread('plate.jpg')
+
+single = cv2.imread('IMG_1008.jpg')
+
+decode(single)
 
 concat = cv2.imread('concat.jpg')
 
@@ -21,21 +29,20 @@ result = []
 
 
 
-sorted_result
-
-
 camera = cv2.imread('/Users/hui/Downloads/IMG_1007.jpg')
 plt.imshow(camera)
 
 res = decode(camera,timeout=1000)
 
-
+camera=single
 
 # convert image to grayscale
 gray = cv2.cvtColor(camera,cv2.COLOR_BGR2GRAY)
 plt.imshow(gray,cmap='gray')
-th,threshold = cv2.threshold(gray,240,255,cv2.THRESH_BINARY)
 
+
+# create threshold to remove backgroud black.
+th,threshold = cv2.threshold(gray,240,255,cv2.THRESH_BINARY)
 
 plt.imshow(threshold,cmap='gray')
 
@@ -50,49 +57,48 @@ cnt = sorted(cnts, key=cv2.contourArea)[-1]
 ## (4) Crop and save it
 x,y,w,h = cv2.boundingRect(cnt)
 dst = gray[y:y+h, x:x+w]
-plt.imshow(camera)
 plt.imshow(dst,cmap='gray')
-camera.shape
-dst.shape
 
 
-(thresh, im_bw) = cv2.threshold(dst, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
+# convert to black and white
+(thresh, im_bw) = cv2.threshold(dst, 160, 255,cv2.THRESH_BINARY)# cv2.THRESH_BINARY | cv2.THRESH_OTSU)
 plt.imshow(im_bw,cmap='gray')
 
-im_bw_resize = cv2.resize(im_bw,(im_bw.shape[1]//2,int(im_bw.shape[0]//2)))
+# resize to smaller seems to be helpful with reading.
+im_bw_resize = cv2.resize(im_bw,(int(im_bw.shape[1]/1.5),int(im_bw.shape[0]/1.5)))
 
 plt.imshow(im_bw_resize,cmap='gray')
 
-cv2.imwrite('im_bw_resize.jpg',im_bw_resize)
-result = decode(im_bw_resize,timeout=100000)
-len(result)
-
-result
-
-code = []
-for r in result:
-    center_left = r.rect.left + r.rect.width/2
-    center_top = r.rect.top + r.rect.height/2
-    code.append((r.data.decode(),center_left,center_top))
-
-code.sort(key=lambda x: -x[2])
-code
+cv2.imwrite('im_bw_resize4.jpg',im_bw_resize)
+result = decode(im_bw_resize,timeout=100000,max_count=96)
 
 
+result = decode(im_bw,timeout=100000,max_count=96)
+decode(im_bw)
+decode(dst)
 
-def parse_plate_result(res):    
-    for r in res:
-        center_left = r.rect.left + r.rect.width/2
-        center_top = r.rect.top + r.rect.height/2
-        result.append((r.data.decode(),center_left,center_top))
-
-    result.sort(key=lambda x:-x[2])
-
-
-    sorted_result = []
-
+def panel_parse(im_bw):
+    "read each panel of a black and white image."
+    h,w = im_bw.shape
+    px = w//12
+    py = h//8
+    panel_result = []
     for r in range(8):
-        row = result[r*12:r*12+12]
-        row.sort(key=lambda x: x[1])
-        sorted_result.extend(i[0] for i in row)
-    return sorted_result
+        for c in range(12):
+            panel = im_bw[py*r:py*r+py,px*c:px*c+px]
+            res = decode(panel,max_count=1,timeout=5000)         
+            if res:
+                panel_result.append(res[0])
+            else:
+                panel_result.append(None)
+    return panel_result
+    
+resize_result = panel_parse(im_bw_resize)
+
+for i,dres in enumerate(resize_result):
+    read = dres and dres.data.decode()
+    if read != originals[i]:
+        print(f'{i//12+1}x{i%12+1} : {read}=>{originals[i]}')
+
+
+     
