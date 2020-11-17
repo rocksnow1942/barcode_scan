@@ -1,14 +1,3 @@
-# import qrcode
-
-# # img = qrcode.make('test text')
-
-
-# from barcode import EAN13,Code128,UPCA
-
-# c128 = Code128('AB123ab')
-
-# c128.save('128.png')
-
 
 
 from pylibdmtx.pylibdmtx import decode,encode
