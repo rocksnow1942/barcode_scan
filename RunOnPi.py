@@ -84,14 +84,16 @@ def show_panel(im_bw,panel,offset=(0,0)):
     panel_img = im_bw.crop((px*(c-0.1)+x,py*(r-0.1)+y,px*(c+1.1)+x,py*(r+1.1)+y,))
     return panel_img
 
-t0 = time.perf_counter()
-resize_result = panel_parse(img)
-t1 = time.perf_counter()
 
-print(f'Time elasped: {t1-t0:.6f}s')
+if __name__ == '__main__':
+    t0 = time.perf_counter()
+    resize_result = panel_parse(img)
+    t1 = time.perf_counter()
 
-for i,dres in enumerate(resize_result):
-    if dres not in originals:
-        print(f'{i//12+1}x{i%12+1} : {dres}=>{originals[i]}')
-    else:
-        print(f'{i//12+1}x{i%12+1} : correct')
+    print(f'Time elasped: {t1-t0:.6f}s')
+
+    for i,dres in enumerate(resize_result):
+        if dres not in originals:
+            print(f'{i//12+1}x{i%12+1} : {dres}=>{originals[i]}')
+        else:
+            print(f'{i//12+1}x{i%12+1} : correct')
