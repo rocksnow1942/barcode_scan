@@ -12,4 +12,5 @@ Take 3 steps to build and install the libdmtx library:
 After installing the libdmtx library, your Python code should work.
 
 
-
+Install OpenCV
+https://www.pyimagesearch.com/2019/09/16/install-opencv-4-on-raspberry-pi-4-and-raspbian-buster/
