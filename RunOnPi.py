@@ -51,7 +51,7 @@ def decode_panel(panel):
     p = None
     for ratio in [3,2,1.5]:
         panel_resize = panel.resize(( int(px/ratio) , int(py/ratio) ))
-        res = decode(panel_resize,max_count=1,timeout=3000)
+        res = decode(panel_resize,max_count=1)
         
         if res and len(res[0].data.decode())==10 and res[0].data.decode().isnumeric():
             p = res[0].data.decode()
