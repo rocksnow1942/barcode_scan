@@ -20,6 +20,10 @@ def add_border(image,percent):
             right = int(col*percent), borderType=cv2.BORDER_CONSTANT,value=[mean,mean,mean])
 
 
+img = cv2.imread('imgs/printer_iphone.jpg')
+
+cv2.imshow('image',img)
+
 
 len(imgs)
 imgs

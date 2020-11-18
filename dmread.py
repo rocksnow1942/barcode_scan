@@ -6,7 +6,7 @@ import glob
 imgs = glob.glob('96DM/*.png')
 
 
-"sudo apt-get install libdmtx0b"
+
 
 
 originals = [i[5:15] for i in imgs]

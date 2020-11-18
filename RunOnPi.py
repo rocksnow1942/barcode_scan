@@ -4,6 +4,9 @@ from PIL import Image
 
 img = Image.open('./camera_croped.jpg')
 
+img = Image.open('./imgs/test1_cropped.png')
+
+
 import glob
 imgs = glob.glob('96DM/*.png')
 originals = [i[5:15] for i in imgs]
@@ -39,7 +42,7 @@ def panel_parse(im_bw):
             panel_result.append(p)
     return panel_result
 
-def show_panel(im_bw,panel,offset=(0,0)):
+def show_panel(im_bw,panel=(1,1),offset=(0,0)):
     r,c = panel
     x,y = offset
     w,h = im_bw.size
@@ -49,6 +52,13 @@ def show_panel(im_bw,panel,offset=(0,0)):
     c-=1    
     panel_img = im_bw.crop((px*(c-0.1)+x,py*(r-0.1)+y,px*(c+1.1)+x,py*(r+1.1)+y,))
     return panel_img
+
+
+show_panel(img,(1,1))
+
+resize_result = panel_parse(img)
+
+
 
 
 if __name__ == '__main__':
