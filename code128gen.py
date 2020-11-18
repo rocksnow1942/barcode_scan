@@ -30,8 +30,6 @@ h = convert(int(text),printable)
 
 
 
-h
-
 buf = BytesIO()
 c128 = Code128(text,writer=ImageWriter())
 

@@ -1,0 +1,15 @@
+https://stackoverflow.com/questions/59989893/datamatrix-with-raspberry
+
+I suppose there's no pre-built library for Raspberry Pi. So you can build it by yourself. Here is the source code:
+
+https://github.com/dmtx/libdmtx
+
+Take 3 steps to build and install the libdmtx library:
+
+  $ ./configure
+  $ make
+  $ sudo make install
+After installing the libdmtx library, your Python code should work.
+
+
+

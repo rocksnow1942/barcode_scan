@@ -4,6 +4,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import glob
 imgs = glob.glob('96DM/*.png')
+
+
+"sudo apt-get install libdmtx0b"
+
+
 originals = [i[5:15] for i in imgs]
 
 
@@ -30,6 +35,9 @@ result = []
 
 
 camera = cv2.imread('/Users/hui/Downloads/IMG_1007.jpg')
+
+camera = cv2.imread('./imgs/printer_iphone.jpg')
+
 plt.imshow(camera)
 
 res = decode(camera,timeout=1000)
@@ -42,7 +50,7 @@ plt.imshow(gray,cmap='gray')
 
 
 # create threshold to remove backgroud black.
-th,threshold = cv2.threshold(gray,240,255,cv2.THRESH_BINARY)
+th,threshold = cv2.threshold(gray,220,255,cv2.THRESH_BINARY)
 
 plt.imshow(threshold,cmap='gray')
 
@@ -65,11 +73,11 @@ plt.imshow(dst,cmap='gray')
 plt.imshow(im_bw,cmap='gray')
 
 # resize to smaller seems to be helpful with reading.
-im_bw_resize = cv2.resize(im_bw,(int(im_bw.shape[1]/1.5),int(im_bw.shape[0]/1.5)))
+im_bw_resize = cv2.resize(im_bw,(int(im_bw.shape[1]/1),int(im_bw.shape[0]/1)))
 
 plt.imshow(im_bw_resize,cmap='gray')
 
-cv2.imwrite('im_bw_resize4.jpg',im_bw_resize)
+cv2.imwrite('im_bw_resize1.5.jpg',im_bw_resize)
 result = decode(im_bw_resize,timeout=100000,max_count=96)
 
 
@@ -86,14 +94,73 @@ def panel_parse(im_bw):
     for r in range(8):
         for c in range(12):
             panel = im_bw[py*r:py*r+py,px*c:px*c+px]
-            res = decode(panel,max_count=1,timeout=5000)         
-            if res:
-                panel_result.append(res[0])
-            else:
-                panel_result.append(None)
+            p = None
+            for ratio in [3,2,1.5]:
+                panel_resize = cv2.resize(panel,
+                        (int(panel.shape[1]/ratio),int(panel.shape[0]/ratio)))
+                res = decode(panel_resize,max_count=1,timeout=3000)
+                
+                if res and len(res[0].data.decode())==10 and res[0].data.decode().isnumeric():
+                    p = res[0].data.decode()
+                    break
+            panel_result.append(p)
     return panel_result
+
+def show_panel(im_bw,panel,offset=(0,0)):
+    r,c = panel
+    x,y = offset
+    h,w = im_bw.shape
+    px = w//12
+    py = h//8
+    r-=1
+    c-=1
+    
+    panel_img = im_bw[py*r+y:py*r+py+y,px*c+x:px*c+px+x]
+    
+    plt.imshow(panel_img,cmap='gray')
+    return panel_img
+    
     
 resize_result = panel_parse(im_bw_resize)
+
+im_bw_resize = cv2.resize(im_bw,(int(im_bw.shape[1]/2),int(im_bw.shape[0]/1)))
+
+
+parse_result = [i and i.data.decode() for i in resize_result]
+
+for i in parse_result:
+    if i not in originals:
+        print(i)
+
+p1_1 = show_panel(im_bw_resize,panel=(2,9),offset=(0,0))
+1x1 : None=>5100026938
+1x9 : .0E=>3410940896
+6x2 : None=>5077455922
+
+1x1 : None=>5100026938
+2x9 : None=>5634234914
+6x2 : None=>5077455922
+8x12 : None=>5409100344
+
+5409100344
+1054627739
+9088131160
+1054627739
+
+decode(p1_1,max_count=1)
+        
+show_panel(im_bw_resize,panel=(8,1))
+for r in range(8):
+    for c in range(12):
+        show_panel(im_bw_resize,panel=(r+1,c+1))
+        plt.show()
+
+for i,dres in enumerate(parse_result):
+    if dres not in originals:
+        print(f'{i//12+1}x{i%12+1} : {dres}=>{originals[i]}')
+        
+        
+        
 
 for i,dres in enumerate(resize_result):
     read = dres and dres.data.decode()
