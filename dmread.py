@@ -133,19 +133,6 @@ for i in parse_result:
         print(i)
 
 p1_1 = show_panel(im_bw_resize,panel=(2,9),offset=(0,0))
-1x1 : None=>5100026938
-1x9 : .0E=>3410940896
-6x2 : None=>5077455922
-
-1x1 : None=>5100026938
-2x9 : None=>5634234914
-6x2 : None=>5077455922
-8x12 : None=>5409100344
-
-5409100344
-1054627739
-9088131160
-1054627739
 
 decode(p1_1,max_count=1)
         
