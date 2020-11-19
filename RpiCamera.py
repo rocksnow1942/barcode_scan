@@ -4,7 +4,7 @@ How to setup:
 adjust picamera v2 lense focus.
 counter-clockwise if near focus, clockwise if further focus. 
 max resolution is 3280×2464 
-distance between focus plane and camera: 11mm. 
+distance between focus plane and camera: 11c. 
 """
 import time
 import picamera
@@ -33,3 +33,15 @@ with picamera.PiCamera() as camera:
 # "Rewind" the stream to the beginning so we can read its content
 stream.seek(0)
 image = Image.open(stream)
+
+
+# reize after capture
+import time
+import picamera
+
+with picamera.PiCamera() as camera:
+    camera.resolution = (1024, 768)
+    camera.start_preview()
+    # Camera warm-up time
+    time.sleep(2)
+    camera.capture('foo.jpg', resize=(320, 240))

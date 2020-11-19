@@ -1,5 +1,5 @@
 on raspbian: "sudo apt-get install libdmtx0b"
-
+then pip3 install pylibdmtx
 
 https://stackoverflow.com/questions/59989893/datamatrix-with-raspberry
 
