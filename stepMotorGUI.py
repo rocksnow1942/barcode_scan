@@ -20,25 +20,25 @@ class Controller(tk.Tk):
         self.stepVar = tk.IntVar()
         self.stepVar.set(200)
         tk.Label(text='Step2 (Interger)').grid(column=0,row=0,padx=15,pady=10,sticky='e')
-        tk.Entry(textvariable=self.stepVar, width=25).grid(column=1,row=0,padx=(0,15))
+        tk.Entry(textvariable=self.stepVar, width=20).grid(column=1,row=0,padx=(0,15))
 
 
         self.speedVar = tk.IntVar()
         self.speedVar.set(400)
         tk.Label(text='Speed (steps/second)',).grid(column=0,row=1,padx=15,pady=10,sticky='e')
-        tk.Entry(textvariable=self.speedVar, width=25).grid(column=1,row=1,padx=(0,15))
+        tk.Entry(textvariable=self.speedVar, width=20).grid(column=1,row=1,padx=(0,15))
 
-        self.runBtn = tk.Button(text='Run',command=self.runBtnCb)
+        self.runBtn = tk.Button(text='Run',font=('Helvetica',32),command=self.runBtnCb)
         self.runBtn.grid(column=0,row=2,padx=15,pady=10,sticky='we')
 
-        self.stopBtn = tk.Button(text='Stop',command=self.stopBtnCb)
+        self.stopBtn = tk.Button(text='Stop',font=('Helvetica',32),command=self.stopBtnCb)
         self.stopBtn.grid(column=1,row=2,padx=15,pady=10,sticky='we')
         self.stopBtn['state']='disabled'
 
         self.msgVar = tk.StringVar()
         self.msgVar.set('Searching motor...')
         self.msg = tk.Label(textvariable=self.msgVar,font=('Helvetica',12))
-        self.msg.grid(column=0,row=3,columnspan=2)
+        self.msg.grid(column=0,row=3,columnspan=2,pady=(0,10))
     
     def clearBtnStatus(self):
         "reset btn status when motor done moving."
