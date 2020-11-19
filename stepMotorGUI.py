@@ -20,13 +20,13 @@ class Controller(tk.Tk):
         self.stepVar = tk.IntVar()
         self.stepVar.set(200)
         tk.Label(text='Step2 (Interger)').grid(column=0,row=0,padx=15,pady=10,sticky='e')
-        tk.Entry(textvariable=self.stepVar, width=25).grid(column=1,row=0)
+        tk.Entry(textvariable=self.stepVar, width=25).grid(column=1,row=0,padx=(0,15))
 
 
         self.speedVar = tk.IntVar()
         self.speedVar.set(400)
         tk.Label(text='Speed (steps/second)',).grid(column=0,row=1,padx=15,pady=10,sticky='e')
-        tk.Entry(textvariable=self.speedVar, width=25).grid(column=1,row=1)
+        tk.Entry(textvariable=self.speedVar, width=25).grid(column=1,row=1,padx=(0,15))
 
         self.runBtn = tk.Button(text='Run',command=self.runBtnCb)
         self.runBtn.grid(column=0,row=2,padx=15,pady=10,sticky='we')
@@ -73,16 +73,12 @@ class Controller(tk.Tk):
         "scan Pico connected and update pico list"        
         def findPort(p):
             try:
-                print(p)
                 ser = serial.Serial(p,115200)
                 ser.write('test'.encode())
                 time.sleep(3)
                 res = ser.readline().decode()
-                print(res)
                 if res[0:4]=='send' and self.motorPort==None:
                     self.motorPort = ser
-
-                
                     self.displaymsg(f"Connected to Motor @ {p}.",'green')
             except: pass
         
