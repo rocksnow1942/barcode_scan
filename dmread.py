@@ -45,6 +45,7 @@ res = decode(camera,timeout=1000)
 camera=single
 
 # convert image to grayscale
+
 gray = cv2.cvtColor(camera,cv2.COLOR_BGR2GRAY)
 plt.imshow(gray,cmap='gray')
 

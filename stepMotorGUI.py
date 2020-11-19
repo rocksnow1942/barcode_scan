@@ -19,7 +19,7 @@ class Controller(tk.Tk):
 
         self.stepVar = tk.IntVar()
         self.stepVar.set(200)
-        tk.Label(text='Step2 (Interger)').grid(column=0,row=0,padx=15,pady=10,sticky='e')
+        tk.Label(text='Steps (Interger)').grid(column=0,row=0,padx=15,pady=10,sticky='e')
         tk.Entry(textvariable=self.stepVar, width=20).grid(column=1,row=0,padx=(0,15))
 
 
@@ -72,11 +72,18 @@ class Controller(tk.Tk):
     def scanMotor(self):
         "scan Pico connected and update pico list"        
         def findPort(p):
+            #/dev/cu.usbserial-0001
             try:
+
                 ser = serial.Serial(p,115200)
+                time.sleep(0.3)
+                print(ser.read_all())
+                time.sleep(0.3)
                 ser.write('test'.encode())
                 time.sleep(3)
+                
                 res = ser.readline().decode()
+                print(res)
                 if res[0:4]=='send' and self.motorPort==None:
                     self.motorPort = ser
                     self.displaymsg(f"Connected to Motor @ {p}.",'green')
@@ -84,7 +91,9 @@ class Controller(tk.Tk):
         
         def scan():
             ports = [i.device for i in serial.tools.list_ports.comports()]
+            
             for i in ports:
+                print(i)
                 Thread(target=findPort,args=(i,),daemon=True).start()
 
         Thread(target=scan,daemon=True).start() 
