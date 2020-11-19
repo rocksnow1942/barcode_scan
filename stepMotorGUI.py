@@ -1,4 +1,3 @@
-import keyboard
 import tkinter as tk
 from threading import Thread
 import serial.tools.list_ports
