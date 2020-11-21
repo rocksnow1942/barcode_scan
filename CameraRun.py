@@ -14,7 +14,7 @@ camera.resolution = (3200,2400)
 camera.rotation = 90
 camera.framerate = 24
 camera.hflip = True
-camera.start_preview(fullscreen=False,window=(100,20,640,480)) #
+camera.start_preview(fullscreen=False,window=(0,0,320,240)) #
 # Add the overlay directly into layer 3 with transparency;
 # we can omit the size parameter of add_overlay as the
 # size is the same as the camera's resolution
