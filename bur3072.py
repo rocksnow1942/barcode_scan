@@ -41,27 +41,27 @@ class Scaner(tk.Tk):
         
         
     def create_widgets(self):
-        tk.Label(text='First Scan:',font=('Helvetica',40)).place(x=106,y=20)
+        tk.Label(text='First Scan:',font=('Monospace',40)).place(x=90,y=20)
         #grid(column=0,row=0,sticky='e',padx=(40,10),pady=(55,50))
         
         self.scanVar1 = tk.StringVar()
         # self.scanVar1.set('1234567890')
         
-        self.scan1 = tk.Label(textvariable=self.scanVar1,font=('Helvetica',40))
+        self.scan1 = tk.Label(textvariable=self.scanVar1,font=('Monospace',40))
         self.scan1.place(x=410,y=20)#grid(column=1,row=0,)
         
-        tk.Label(text='Second Scan:',font=('Helvetica',40)).place(x=20,y=110)
+        tk.Label(text='Second Scan:',font=('Monospace',40)).place(x=20,y=110)
         #.grid(column=0,row=1,sticky='e',padx=(40,10),pady=(55,50))
         self.scanVar2 = tk.StringVar()
         # self.scanVar2.set('1234567890')
-        self.scan2 = tk.Label(textvariable=self.scanVar2,font=('Helvetica',40))
+        self.scan2 = tk.Label(textvariable=self.scanVar2,font=('Monospace',40))
         self.scan2.place(x=410,y=110)#.grid(column=1,row=1,)
         
-        tk.Button(text='Confirm',font=('Helvetica',60),command=self.confirm).place(x=20,y=210,height=150,width=360)#grid(column=0,row=2,sticky='n',pady=(55,50))
-        tk.Button(text='Cancel',font=('Helvetica',60),command=self.cancel).place(x=420,y=210,height=150,width=360)#grid(column=1,row=2,sticky='n',padx=(50,20),pady=(55,50))
+        tk.Button(text='Confirm',font=('Monospace',60),command=self.confirm).place(x=20,y=210,height=150,width=360)#grid(column=0,row=2,sticky='n',pady=(55,50))
+        tk.Button(text='Cancel',font=('Monospace',60),command=self.cancel).place(x=420,y=210,height=150,width=360)#grid(column=1,row=2,sticky='n',padx=(50,20),pady=(55,50))
          
         self.msgVar = tk.StringVar()
-        self.msg = tk.Label(textvariable=self.msgVar,font=('Helvetica',30))
+        self.msg = tk.Label(textvariable=self.msgVar,font=('Arial',30))
         # self.msgVar.set('Confirm/Cancel before new scan')
         self.msg.place(x=50,y=400)#grid(column=0,row=3,columnspan=2)
          
