@@ -13,6 +13,7 @@ camera = picamera.PiCamera()
 camera.resolution = (3280,2464)
 camera.rotation = 90
 camera.framerate = 24
+camera.hflip = True
 camera.start_preview(fullscreen=False,window=(100,20,640,480))
 # Add the overlay directly into layer 3 with transparency;
 # we can omit the size parameter of add_overlay as the
