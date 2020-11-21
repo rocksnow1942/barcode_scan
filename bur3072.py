@@ -50,7 +50,7 @@ class Scaner(tk.Tk):
         self.scan1 = tk.Label(textvariable=self.scanVar1,font=('Arial',40))
         self.scan1.place(x=410,y=20)#grid(column=1,row=0,)
         
-        tk.Label(text='Second Scan:',font=('Monospace',40)).place(anchor='ne',x=390,y=20)
+        tk.Label(text='Second Scan:',font=('Monospace',40)).place(anchor='ne',x=390,y=110)
         #.grid(column=0,row=1,sticky='e',padx=(40,10),pady=(55,50))
         self.scanVar2 = tk.StringVar()
         # self.scanVar2.set('1234567890')
