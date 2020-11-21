@@ -13,6 +13,8 @@ from pyzbar.pyzbar import decode
 # a[240, :, :] = 0xff
 # a[:, 320, :] = 0xff
 
+c_w = 800
+c_h = c_w*3//4
 
 
 pad = Image.new('RGBA',(800,480))
@@ -23,7 +25,7 @@ padDraw.rectangle([100,100,200,200],fill=(0,0,0,0),outline=(255,0,0,180))
 
 
 camera = picamera.PiCamera()
-camera.resolution = (3200,2400)
+camera.resolution = (300 * 4, 300 * 3)
 camera.rotation = 90
 camera.framerate = 24
 camera.hflip = True
@@ -36,8 +38,7 @@ camera.start_preview(fullscreen=False,window=(w_x,w_y,w_w,w_h)) #
 # we can omit the size parameter of add_overlay as the
 # size is the same as the camera's resolution
 stream = BytesIO()
-c_w = 800
-c_h = c_w*3//4
+
 
 try:
     # Wait indefinitely until the user terminates the script
