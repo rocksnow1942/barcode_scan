@@ -60,8 +60,9 @@ try:
             padDraw.polygon(xy,fill=(0,0,0,0),outline=(0,255,0,180))
             o = camera.add_overlay(pad.tobytes(),size=pad.size, layer=3)
         else:
-            camera.remove_overlay(o)
-            o = None
+            if o:
+                camera.remove_overlay(o)
+                o = None
 finally:
     camera.remove_overlay(o)
     pass
