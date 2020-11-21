@@ -28,11 +28,16 @@ camera.rotation = 90
 camera.framerate = 24
 camera.hflip = True
 o = camera.add_overlay(pad.tobytes(),size=pad.size, layer=3)
-camera.start_preview(fullscreen=False,window=(0,0,320,240)) #
+
+w_x,w_y,w_w,w_h = (0,0,320,240)
+
+camera.start_preview(fullscreen=False,window=(w_x,w_y,w_w,w_h)) #
 # Add the overlay directly into layer 3 with transparency;
 # we can omit the size parameter of add_overlay as the
 # size is the same as the camera's resolution
 stream = BytesIO()
+c_w,c_h = 1200,900
+
 try:
     # Wait indefinitely until the user terminates the script
     while True:
@@ -40,7 +45,7 @@ try:
         
         # capture and detect
         stream.seek(0)
-        camera.capture(stream,format='jpeg',resize=(1200,800))
+        camera.capture(stream,format='jpeg',resize=(c_w,c_h))
         stream.seek(0)
         img = Image.open(stream)
         # img = ImageOps.mirror(img)
@@ -50,16 +55,16 @@ try:
             if o:
                 camera.remove_overlay(o)
             code = code[0]
-            print(code.data.decode())
-            # xy = [ (i.x*4//15,i.y*4//15) for i in code.polygon]
-            x,y = code.rect.left,code.rect.top
-            w,h = code.rect.width,code.rect.height
+            # print(code.data.decode())
+            xy = [ (i.x*w_w//c_w,i.y*w_w//c_w) for i in code.polygon]
+            # x,y = code.rect.left,code.rect.top
+            # w,h = code.rect.width,code.rect.height
             pad = Image.new('RGBA',(800,480))
 
             padDraw = ImageDraw.Draw(pad)
 
-            # padDraw.polygon(xy,fill=(0,0,0,0),outline=(0,255,0,180))
-            padDraw.rectangle([x,y,x+w,y+h],fill=(0,0,0,0),outline=(0,255,0,180))
+            padDraw.polygon(xy,fill=(0,0,0,0),outline=(0,255,0,180))
+            # padDraw.rectangle([x,y,x+w,y+h],fill=(0,0,0,0),outline=(0,255,0,180))
             o = camera.add_overlay(pad.tobytes(),size=pad.size, layer=3)
         else:
             if o:
