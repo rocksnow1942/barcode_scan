@@ -2,9 +2,9 @@ import cv2
 import numpy as np
 
 #create 3 separate BGRA images as our "layers"
-layer2 = np.zeros((800, 480, 4))
-layer1 = np.zeros((800, 480, 4))
-layer3 = np.zeros((800, 480, 4))
+layer2 = np.zeros((480, 800, 4))
+layer1 = np.zeros((480, 800, 4))
+layer3 = np.zeros((480, 800, 4))
 
 #draw a red circle on the first "layer",
 #a green rectangle on the second "layer",
