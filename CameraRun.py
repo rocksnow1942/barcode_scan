@@ -36,7 +36,8 @@ camera.start_preview(fullscreen=False,window=(w_x,w_y,w_w,w_h)) #
 # we can omit the size parameter of add_overlay as the
 # size is the same as the camera's resolution
 stream = BytesIO()
-c_w,c_h = 1200,900
+c_w = 1600
+c_h = c_w*3//4
 
 try:
     # Wait indefinitely until the user terminates the script
