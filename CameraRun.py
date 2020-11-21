@@ -5,12 +5,12 @@ import numpy as np
 # Create an array representing a 1280x720 image of
 # a cross through the center of the display. The shape of
 # the array must be of the form (height, width, color)
-a = np.zeros((720,1280 , 3), dtype=np.uint8)
+a = np.zeros((1440,2560 , 3), dtype=np.uint8)
 a[240, :, :] = 0xff
 a[:, 320, :] = 0xff
 
 camera = picamera.PiCamera()
-camera.resolution = (1280,720)
+camera.resolution = (2560,1440)
 camera.rotation = 90
 camera.framerate = 24
 camera.hflip = True
