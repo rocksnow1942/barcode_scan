@@ -25,7 +25,7 @@ padDraw.rectangle([100,100,200,200],fill=(0,0,0,0),outline=(255,0,0,180))
 
 
 camera = picamera.PiCamera()
-camera.resolution = (300 * 4, 300 * 3)
+camera.resolution = (200 * 4, 200 * 3)
 camera.rotation = 90
 camera.framerate = 24
 camera.hflip = True
@@ -47,7 +47,7 @@ try:
         
         # capture and detect
         stream.seek(0)
-        camera.capture(stream,format='jpeg',resize=(c_w,c_h))
+        camera.capture(stream,format='jpeg',) #resize=(c_w,c_h)
         stream.seek(0)
         img = Image.open(stream)
         # img = ImageOps.mirror(img)
