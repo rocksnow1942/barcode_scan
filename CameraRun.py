@@ -40,12 +40,13 @@ try:
         
         # capture and detect
         stream.seek(0)
-        camera.capture(stream,format='jpeg',resize=(800,600))
+        camera.capture(stream,format='jpeg',resize=(1200,800))
         stream.seek(0)
         img = Image.open(stream)
         # img = ImageOps.mirror(img)
         
         code = decode(img)
+        print(code)
         if code:
             camera.remove_overlay(o)
             code = code[0]
