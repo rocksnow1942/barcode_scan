@@ -2,7 +2,7 @@ from io import BytesIO
 import time
 import picamera
 import numpy as np
-from PIL import Image,ImageOps
+from PIL import Image,ImageOps,ImageDraw,ImagePath
 import numpy as np
 from pyzbar.pyzbar import ZBarSymbol
 from pyzbar.pyzbar import decode
@@ -13,33 +13,21 @@ from pyzbar.pyzbar import decode
 # a[240, :, :] = 0xff
 # a[:, 320, :] = 0xff
 
-img = Image.open('out.png')
- 
-
-# ImageOps.mirror(img)
-
-a = np.array(img)
 
 
+pad = Image.new('RGBA',(800,480))
 
-a.shape
+padDraw = ImageDraw.Draw(pad)
 
+padDraw.rectangle([100,100,200,200],fill=(0,0,0,0),outline=(255,0,0,180))
 
-pad = Image.new('RGBA',(
-        ((img.size[0] + 31) // 32) * 32,
-        ((img.size[1] + 15) // 16) * 16,
-        ))
-        
-pad.paste(img, (0, 0),img)
-
- 
 
 camera = picamera.PiCamera()
 camera.resolution = (3200,2400)
 camera.rotation = 90
 camera.framerate = 24
 camera.hflip = True
-o = camera.add_overlay(pad.tobytes(),size=img.size, layer=3)
+o = camera.add_overlay(pad.tobytes(),size=pad.size, layer=3)
 camera.start_preview(fullscreen=False,window=(0,0,320,240)) #
 # Add the overlay directly into layer 3 with transparency;
 # we can omit the size parameter of add_overlay as the
@@ -52,13 +40,22 @@ try:
         
         # capture and detect
         stream.seek(0)
-        camera.capture(stream,format='jpeg',resize=(1200,900))
+        camera.capture(stream,format='jpeg',resize=(800,600))
         stream.seek(0)
         img = Image.open(stream)
+        img = ImageOps.mirror(img)
         
         code = decode(img)
-        
-        print(code)
+        if code:
+            camera.remove_overlay(o)
+            code = code[0]
+            xy = [ (i.x,i.y) for i in code.polygon]
+            pad = Image.new('RGBA',(800,480))
+
+            padDraw = ImageDraw.Draw(pad)
+
+            padDraw.polygon(xy,fill=(0,0,0,0),outline=(0,255,0,180))
+            o = camera.add_overlay(pad.tobytes(),size=pad.size, layer=3)        
                 
 finally:
     camera.remove_overlay(o)
