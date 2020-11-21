@@ -47,7 +47,8 @@ try:
         
         code = decode(img)
         if code:
-            camera.remove_overlay(o)
+            if o:
+                camera.remove_overlay(o)
             code = code[0]
             print(code)
             xy = [ (i.x*4//15,i.y*4//15) for i in code.polygon]
@@ -60,6 +61,7 @@ try:
             o = camera.add_overlay(pad.tobytes(),size=pad.size, layer=3)
         else:
             camera.remove_overlay(o)
+            o = None
 finally:
     camera.remove_overlay(o)
     pass
