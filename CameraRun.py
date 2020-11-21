@@ -16,10 +16,11 @@ camera.start_preview(fullscreen=False,window=(100,20,640,480))
 # Add the overlay directly into layer 3 with transparency;
 # we can omit the size parameter of add_overlay as the
 # size is the same as the camera's resolution
-o = camera.add_overlay(a, layer=3, alpha=64)
+# o = camera.add_overlay(a, layer=3, alpha=64)
 try:
     # Wait indefinitely until the user terminates the script
     while True:
         time.sleep(1)
 finally:
-    camera.remove_overlay(o)
+    # camera.remove_overlay(o)
+    pass
