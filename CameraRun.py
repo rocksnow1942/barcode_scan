@@ -50,7 +50,7 @@ try:
         if code:
             camera.remove_overlay(o)
             code = code[0]
-            xy = [ (i.x,i.y) for i in code.polygon]
+            xy = [ (i.x*2//3,i.y*2//3) for i in code.polygon]
             print(xy)
             pad = Image.new('RGBA',(800,480))
 
