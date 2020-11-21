@@ -41,7 +41,7 @@ class Scaner(tk.Tk):
         
         
     def create_widgets(self):
-        tk.Label(text='First Scan:',font=('Arial',40)).place(x=70,y=20)
+        tk.Label(text='First Scan:',font=('Arial',40)).place(x=100,y=20)
         #grid(column=0,row=0,sticky='e',padx=(40,10),pady=(55,50))
         
         self.scanVar1 = tk.StringVar()
