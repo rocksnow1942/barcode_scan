@@ -1,15 +1,29 @@
+from io import BytesIO
 import time
 import picamera
 import numpy as np
-from PIL import Image
+from PIL import Image,ImageOps
+import numpy as np
+from pyzbar.pyzbar import ZBarSymbol
+from pyzbar.pyzbar import decode
 # Create an array representing a 1280x720 image of
 # a cross through the center of the display. The shape of
 # the array must be of the form (height, width, color)
-a = np.zeros((2400,3200 , 3), dtype=np.uint8)
-a[240, :, :] = 0xff
-a[:, 320, :] = 0xff
+# a = np.zeros((2400,3200 , 3), dtype=np.uint8)
+# a[240, :, :] = 0xff
+# a[:, 320, :] = 0xff
 
 img = Image.open('out.png')
+ 
+
+# ImageOps.mirror(img)
+
+a = np.array(img)
+
+
+
+a.shape
+
 
 pad = Image.new('RGBA',(
         ((img.size[0] + 31) // 32) * 32,
@@ -18,8 +32,7 @@ pad = Image.new('RGBA',(
         
 pad.paste(img, (0, 0),img)
 
-
-
+ 
 
 camera = picamera.PiCamera()
 camera.resolution = (3200,2400)
@@ -31,11 +44,22 @@ camera.start_preview(fullscreen=False,window=(0,0,320,240)) #
 # Add the overlay directly into layer 3 with transparency;
 # we can omit the size parameter of add_overlay as the
 # size is the same as the camera's resolution
-
+stream = BytesIO()
 try:
     # Wait indefinitely until the user terminates the script
     while True:
         time.sleep(1)
+        
+        # capture and detect
+        stream.seek(0)
+        camera.capture(stream,format='jpeg',resize=(1200,900))
+        stream.seek(0)
+        img = Image.open(stream)
+        
+        code = decode(img)
+        
+        print(code)
+                
 finally:
     camera.remove_overlay(o)
     pass
