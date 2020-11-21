@@ -43,7 +43,6 @@ stream = BytesIO()
 try:
     # Wait indefinitely until the user terminates the script
     while True:
-        time.sleep(0.1)
         
         # capture and detect
         stream.seek(0)
