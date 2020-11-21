@@ -35,7 +35,7 @@ class Scaner(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title('Scanner App')        
-        self.geometry('1920x1080+10+10')    
+        self.geometry('800x480+0+0')    
         self.create_widgets()    
         Thread(target=self.scanlistener,daemon=True).start()
         

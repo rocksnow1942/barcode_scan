@@ -57,7 +57,7 @@ try:
                 camera.remove_overlay(o)
             code = code[0]
             print(code.data.decode())
-            xy = [ (i.x*w_w//c_w,i.y*w_w//c_w) for i in code.polygon]
+            xy = [ (i.x*w_w//c_w +w_x ,i.y*w_w//c_w + w_y) for i in code.polygon]
             # 
             # x,y = code.rect.left,code.rect.top
             # w,h = code.rect.width,code.rect.height
