@@ -50,14 +50,16 @@ try:
             if o:
                 camera.remove_overlay(o)
             code = code[0]
-            print(code)
-            xy = [ (i.x*4//15,i.y*4//15) for i in code.polygon]
-            
+            print(code.data.decode())
+            # xy = [ (i.x*4//15,i.y*4//15) for i in code.polygon]
+            x,y = code.rect.left,code.rect.top
+            w,h = code.rect.width,code.rect.height
             pad = Image.new('RGBA',(800,480))
 
             padDraw = ImageDraw.Draw(pad)
 
-            padDraw.polygon(xy,fill=(0,0,0,0),outline=(0,255,0,180))
+            # padDraw.polygon(xy,fill=(0,0,0,0),outline=(0,255,0,180))
+            padDraw.rectangle([x,y,x+w,y+h],fill=(0,0,0,0),outline=(0,255,0,180))
             o = camera.add_overlay(pad.tobytes(),size=pad.size, layer=3)
         else:
             if o:
