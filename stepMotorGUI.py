@@ -39,6 +39,8 @@ class Controller(tk.Tk):
         self.msgVar.set('Searching motor...')
         self.msg = tk.Label(textvariable=self.msgVar,font=('Helvetica',12))
         self.msg.grid(column=0,row=3,columnspan=2,pady=(0,10))
+        
+       
     
     def clearBtnStatus(self):
         "reset btn status when motor done moving."
