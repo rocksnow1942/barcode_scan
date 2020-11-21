@@ -46,19 +46,20 @@ try:
         # img = ImageOps.mirror(img)
         
         code = decode(img)
-        print(code)
         if code:
             camera.remove_overlay(o)
             code = code[0]
-            xy = [ (i.x*2//3,i.y*2//3) for i in code.polygon]
-            print(xy)
+            print(code)
+            xy = [ (i.x*4//15,i.y*4//15) for i in code.polygon]
+            
             pad = Image.new('RGBA',(800,480))
 
             padDraw = ImageDraw.Draw(pad)
 
             padDraw.polygon(xy,fill=(0,0,0,0),outline=(0,255,0,180))
-            o = camera.add_overlay(pad.tobytes(),size=pad.size, layer=3)        
-                
+            o = camera.add_overlay(pad.tobytes(),size=pad.size, layer=3)
+        else:
+            camera.remove_overlay(o)
 finally:
     camera.remove_overlay(o)
     pass
