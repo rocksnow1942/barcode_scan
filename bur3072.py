@@ -63,7 +63,7 @@ class Scaner(tk.Tk):
         self.msgVar = tk.StringVar()
         self.msg = tk.Label(textvariable=self.msgVar,font=('Arial',30))
         # self.msgVar.set('Confirm/Cancel before new scan')
-        self.msg.place(x=50,y=390)#grid(column=0,row=3,columnspan=2)
+        self.msg.place(x=50,y=380)#grid(column=0,row=3,columnspan=2)
          
     def displaymsg(self,msg,color='black'):
         self.msgVar.set(msg)
