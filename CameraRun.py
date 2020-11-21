@@ -43,13 +43,14 @@ try:
         camera.capture(stream,format='jpeg',resize=(800,600))
         stream.seek(0)
         img = Image.open(stream)
-        img = ImageOps.mirror(img)
+        # img = ImageOps.mirror(img)
         
         code = decode(img)
         if code:
             camera.remove_overlay(o)
             code = code[0]
             xy = [ (i.x,i.y) for i in code.polygon]
+            print(xy)
             pad = Image.new('RGBA',(800,480))
 
             padDraw = ImageDraw.Draw(pad)
