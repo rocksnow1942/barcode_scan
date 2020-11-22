@@ -43,7 +43,7 @@ count = 0
 try:
     # Wait indefinitely until the user terminates the script
     while True:        
-        time.sleep(1)
+        time.sleep(0.2)
         camera.remove_overlay(o)
         pad = Image.new('RGBA',(800,480))
         count += 1
