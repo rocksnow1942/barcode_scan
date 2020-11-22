@@ -21,7 +21,7 @@ class Camera(picamera.PiCamera):
         self.start_preview(fullscreen=False,window = self._previewWindow)
         self._captureStream = BytesIO()
         overlay = self.drawOverlay()
-        self.add_overlay(overlay)
+        self.add_overlay(overlay,size=overlay.size,layer=3)
         
     def loadSettings(self):
         self.resolution = (800,800*3//4)
@@ -51,7 +51,7 @@ class Camera(picamera.PiCamera):
                 posy = r * ph + yo
                 padDraw.rectangle([posx-pw//2,posy-ph//2,posx+pw//2,posy+ph//2],
                                    fill=(0,0,0,0),outline=outline,width=1)
-        return pad
+        return pad.tobytes()
     
     def run(self):
         ""
