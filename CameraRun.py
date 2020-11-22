@@ -20,8 +20,8 @@ class Camera(picamera.PiCamera):
         self.loadSettings()
         self.start_preview(fullscreen=False,window = self._previewWindow)
         self._captureStream = BytesIO()
-        overlay = self.drawOverlay()
-        self.add_overlay(overlay.tobytes(),size=overlay.size,layer=3)
+        self.overlay = self.drawOverlay()
+        self.add_overlay(self.overlay.tobytes(),size=self.overlay.size,layer=3)
         
     def loadSettings(self):
         self.resolution = (800,800*3//4)
@@ -55,6 +55,13 @@ class Camera(picamera.PiCamera):
     
     def run(self):
         ""
+        try:
+            while True:                
+                time.sleep(1)
+        finally:
+            self.remove_overlay(self.overlay)
+        
+                
     
     
     def scan(self):
@@ -67,6 +74,9 @@ class Camera(picamera.PiCamera):
         # img.save('test.jpeg')
         
 c = Camera()
+c.run()
+
+
 # 
 # 
 # 
