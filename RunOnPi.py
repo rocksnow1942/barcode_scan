@@ -1,5 +1,6 @@
 from pylibdmtx.pylibdmtx import decode
 import time
+
 from PIL import Image 
 
 img = Image.open('./camera_croped.jpg')
