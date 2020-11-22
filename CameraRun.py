@@ -38,8 +38,14 @@ class Camera(picamera.PiCamera):
         padDraw = ImageDraw.Draw(pad)
         column,row = self._scanGrid
         xo,yo,pw,ph = self._previewWindow
-        pw = pw//(column)
-        ph = ph//(row)
+        s1,s2,s3,s4 = self._scanWindow
+        resolutionX, resolutionY = self.resolution
+        scan_offset_x = s1 * pw // resolutionX
+        scan_offset_y = s2 * ph // resolutionY
+        gridWith = (s3-s1) * pw / resolutionX // (column -1)
+        gridHeight = (s4-s2) * ph / resolutionY // (row -1)    
+        gridW_ = gridWith*0.9//2
+        gridH_ = gridHeight*0.9//2
         for r in range(row):
             for c in range(column):
                 idx = r * column + c
@@ -47,9 +53,9 @@ class Camera(picamera.PiCamera):
                     outline = (255,0,0,180)
                 else:
                     outline = (0,255,0,180)
-                posx = c * pw + xo
-                posy = r * ph + yo
-                padDraw.rectangle([posx-pw//2,posy-ph//2,posx+pw//2,posy+ph//2],
+                posx = c * gridWith + xo + scan_offset_x
+                posy = r * gridHeight + yo + scan_offset_y
+                padDraw.rectangle([posx-gridW_,posy-gridH_,posx+gridW_,posy+gridH_],
                                    fill=(0,0,0,0),outline=outline,width=1)
         return pad
     
