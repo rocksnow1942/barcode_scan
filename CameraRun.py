@@ -54,12 +54,12 @@ try:
         o = camera.add_overlay(pad.tobytes(),size=pad.size, layer=3)
         
         # # capture and detect
-        # stream.seek(0)
-        # camera.capture(stream,format='jpeg',) #resize=(c_w,c_h)
-        # stream.seek(0)
-        # img = Image.open(stream)
-        # # img = ImageOps.mirror(img)
-        # 
+        stream.seek(0)
+        camera.capture(stream,format='jpeg',) #resize=(c_w,c_h)
+        stream.seek(0)
+        img = Image.open(stream)
+        # img = ImageOps.mirror(img)
+        
         # code = decode(img)
         # if code:
         #     if o:
