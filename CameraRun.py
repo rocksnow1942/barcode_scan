@@ -29,7 +29,7 @@ class Camera(picamera.PiCamera):
         self.framerate = 24
         self.hflip = True
         self._previewWindow = (10,10,320,240)
-        self._scanWindow = (10,10,790,590)
+        self._scanWindow = (100,109,700,491)
         self._scanGrid = (12,8)
         self.contrast = 100
     
