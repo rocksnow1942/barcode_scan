@@ -76,7 +76,7 @@ class Camera(picamera.PiCamera):
                     width = 3
                 else:
                     outline = (0,255,0,180)
-                    wdidth = 1
+                    width = 1
                 posy = c * gridHeight + yo + scan_offset_y
                 posx = r * gridWidth + xo + scan_offset_x
                 padDraw.rectangle([posx-gridW_,posy-gridH_,posx+gridW_,posy+gridH_],
