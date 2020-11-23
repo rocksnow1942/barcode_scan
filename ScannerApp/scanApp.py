@@ -13,7 +13,7 @@ class ScannerApp(tk.Tk):
         
 
         container = tk.Frame(self)
-
+        
         container.pack(side='top',fill='both',expand=True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
@@ -24,7 +24,11 @@ class ScannerApp(tk.Tk):
             self.pages[F.__name__].grid(row=0, column=0, sticky="nsew")
         
         self.showPage('HomePage')
-    
+        self.overrideredirect(True)
+
+        
+    def moveWindow(self,e):
+        print(e)
     def showPage(self,page):
         self.pages[page].showPage()
         
