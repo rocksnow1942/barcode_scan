@@ -24,7 +24,7 @@ class ScannerApp(tk.Tk):
             self.pages[F.__name__].grid(row=0, column=0, sticky="nsew")
         
         self.showPage('HomePage')
-        self.overrideredirect(True)
+        
 
         
     def moveWindow(self,e):
