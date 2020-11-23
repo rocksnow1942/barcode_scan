@@ -194,8 +194,9 @@ class Camera(PiCamera):
             self.capture(self._captureStream,format='jpeg',) #resize=(c_w,c_h)
             self._captureStream.seek(0)
             img = Image.open(self._captureStream)
-            code = zbarDecode(img)
-            if code and self.startLiveBarcode:                
+            codes = zbarDecode(img)
+            if codes and self.startLiveBarcode:    
+                code = codes[0]            
                 res = code[0].data.decode()
                 if res != self.lastRead:
                     cb(res)

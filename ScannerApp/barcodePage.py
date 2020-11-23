@@ -13,7 +13,7 @@ class BarcodePage(tk.Frame,PageMixin):
         self.initKeyboard()
 
     def create_widgets(self):
-        tk.Label(self, text='From:', font=(
+        tk.Label(self, text='Fr:', font=(
             'Arial', 38)).place(x=340, y=20)
         # grid(column=0,row=0,sticky='e',padx=(40,10),pady=(55,50))
 
