@@ -75,8 +75,8 @@ class Camera(picamera.PiCamera):
                     outline = (255,0,0,180)
                 else:
                     outline = (0,255,0,180)
-                posy = c * gridWidth + yo + scan_offset_x
-                posx = r * gridHeight + xo + scan_offset_y
+                posy = c * gridHeight + yo + scan_offset_y
+                posx = r * gridWidth + xo + scan_offset_x
                 padDraw.rectangle([posx-gridW_,posy-gridH_,posx+gridW_,posy+gridH_],
                                    fill=(0,0,0,0),outline=outline,width=1)
         if self.overlay:
