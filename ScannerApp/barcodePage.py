@@ -1,22 +1,14 @@
-import keyboard
 import tkinter as tk
-from threading import Thread
-from .utils import validateBarcode
+from .utils import validateBarcode,PageMixin
 # https://pypi.org/project/keyboard/
+ 
 
-
-def get_next_scan():
-    events = keyboard.record(until='enter')
-    barcode = list(keyboard.get_typed_strings(events))[0]
-    return barcode
-
-
-class BarcodePage(tk.Frame):
+class BarcodePage(tk.Frame,PageMixin):
     def __init__(self, parent, master):
         super().__init__(parent)
         self.master = master
         self.create_widgets()
-        self.stopScan = False
+        self.initKeyboard()
 
     def create_widgets(self):
         tk.Label(self, text='From Plate:', font=(
@@ -54,43 +46,33 @@ class BarcodePage(tk.Frame):
                   command=self.goToHome).place(x=680, y=390, height=50,width=90)
 
     def showPage(self):
-        self.stopScan = False
-        Thread(target=self.scanlistener, daemon=True).start()
+        self.keySequence = []
+         
         self.tkraise()
-        print('started...')
-
+        self.focus_set()
+      
+        
     def goToHome(self):
-        self.stopScan = True
+         
         self.master.showPage('HomePage')
+        self.keySequence = []
 
-    def displaymsg(self, msg, color='black'):
-        self.msgVar.set(msg)
-        if color:
-            self.msg.config(fg=color)
-
-    def scanlistener(self):
-        while True:
-            res = get_next_scan()
-            if self.stopScan:
-                break
-            if validateBarcode(res, 'plate'):
-                self.displayScan(res)
+    def keyboardCb(self,code):
+        if validateBarcode(code, 'plate'):
+            if code == self.scanVar1.get():
+                self.displaymsg('Same code!', 'red')
+                self.scan1.config(bg='red')
+            elif not self.scanVar1.get():
+                self.scanVar1.set(code)
+                self.scan1.config(bg='green', fg='white')
+            elif not self.scanVar2.get():
+                self.scanVar2.set(code)
+                self.scan2.config(bg='green', fg='white')
             else:
-                self.displaymsg(f"Unrecoginzed: {res}", 'red')
-
-    def displayScan(self, code):
-        if code == self.scanVar1.get():
-            self.displaymsg('Same code!', 'red')
-            self.scan1.config(bg='red')
-        elif not self.scanVar1.get():
-            self.scanVar1.set(code)
-            self.scan1.config(bg='green', fg='white')
-        elif not self.scanVar2.get():
-            self.scanVar2.set(code)
-            self.scan2.config(bg='green', fg='white')
+                self.displaymsg('Confirm/Cancel before new scan.', 'red')
         else:
-            self.displaymsg('Confirm/Cancel before new scan.', 'red')
-
+            self.displaymsg(f"Unrecoginzed: {code}", 'red')
+ 
     def confirm(self):
         code1 = self.scanVar1.get()
         code2 = self.scanVar2.get()

@@ -1,25 +1,19 @@
-import keyboard
 import tkinter as tk
-from threading import Thread
-from .utils import validateBarcode
+from .utils import validateBarcode,PageMixin
 # https://pypi.org/project/keyboard/
 
 from .camera import Camera
-
-def get_next_scan():
-    events = keyboard.record(until='enter')
-    barcode = list(keyboard.get_typed_strings(events))[0]
-    return barcode
+ 
 
 
-class DTMXPage(tk.Frame):
+class DTMXPage(tk.Frame,PageMixin):
     def __init__(self, parent, master):
         super().__init__(parent)
         self.master = master
         self.create_widgets()
-        self.stopScan = False
+         
         self.camera = Camera()
-        self.bind("<Key>",self.keyboardListener)
+        self.initKeyboard()
         
 
     def create_widgets(self):
@@ -57,35 +51,12 @@ class DTMXPage(tk.Frame):
         tk.Button(self, text='Back', font=('Arial', 25),
                   command=self.goToHome).place(x=680, y=390, height=50,width=90)
     
-    def showPage(self):
-        self.stopScan = False
-        # Thread(target=self.scanlistener, daemon=True).start()
-        self.tkraise()
-        self.focus_set()
-        # self.camera.start()
-        
+    
 
-    def goToHome(self):
-        self.stopScan = True
-        # self.camera.stop()
-        self.master.showPage('HomePage')
-
-    def displaymsg(self, msg, color='black'):
-        self.msgVar.set(msg)
-        if color:
-            self.msg.config(fg=color)
-
-    def scanlistener(self,e):
-        # while True:            
-            # res = get_next_scan()
-        if self.stopScan:
-            self.keySequence = []
-            return
-        print(e)
-        # if validateBarcode(res,'plate'):
-        #     self.displayScan(res)
-        # else:
-        #     self.displaymsg(f"Unrecoginzed: {res}", 'red')
+    def keyboardCb(self,code):
+        ""
+        print(f"received code {code}")
+    
 
     def displayScan(self, code):
         if code == self.scanVar1.get():
