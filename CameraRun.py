@@ -64,8 +64,8 @@ class Camera(picamera.PiCamera):
         scan_offset_y = s1 * pw // resolutionX #in preview window, overlay offset caused by scan window in y direction.
         scan_offset_x = s2 * ph // resolutionY #in preview window, overlay offset caused by scan window in x direction.
         
-        gridHeight = (s3-s1) * pw / resolutionX // (column -1) # overlay grid height in preview window, this is actually scan window width.
-        gridWidth = (s4-s2) * ph / resolutionY // (row -1)   # overlay grid height in preview window, this is actually scan window height. 
+        gridHeight = (s3-s1) * ph / resolutionX // (column -1) # overlay grid height in preview window, this is actually scan window width.
+        gridWidth = (s4-s2) * pw / resolutionY // (row -1)   # overlay grid height in preview window, this is actually scan window height. 
         gridW_ = gridWidth*0.9//2 # half width of actually drawing box in preview window
         gridH_ = gridHeight*0.9//2 # half width of actually drawing box in preview window
         for r in range(row):
