@@ -1,4 +1,4 @@
-import sys
+
 from pylibdmtx.pylibdmtx import decode
 from PIL import Image 
 
@@ -18,5 +18,5 @@ if __name__=='__main__':
         for col in range(1,13):
             file = f"./out/{row}{col}.jpeg"
             img = Image.open(file)
-            res = decode_panel(img,max_count=1)
+            res = decode_panel(img,)
             print(f"{row}{col}: {res}")
