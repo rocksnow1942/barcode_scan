@@ -30,6 +30,7 @@ class ScannerApp(tk.Tk):
     def on_closing(self):
         print('exit')
         self.destroy()
+        
 
 class HomePage(tk.Frame):
     def __init__(self,parent,master):
@@ -42,7 +43,7 @@ class HomePage(tk.Frame):
         tk.Button(self,text='Plate',font=('Arial',60),command=lambda:self.master.showPage('BarcodePage')).place(
             x=420,y=40,height=150,width=360)
 
-        tk.Button(self,text='Exit',font=('Arial',60),command=lambda:self.master.on_closing).place(
+        tk.Button(self,text='Exit',font=('Arial',60),command=self.master.on_closing).place(
             x=20,y=210,height=150,width=360)
 
     def showPage(self):

@@ -22,7 +22,7 @@ class DTMXPage(tk.Frame):
         
     def create_widgets(self):
         tk.Label(self, text='LP:', font=(
-            'Arial', 40)).place(x=390, y=20,width=300,height=400)
+            'Arial', 40)).place(anchor='ne',x=390, y=20, )
         # grid(column=0,row=0,sticky='e',padx=(40,10),pady=(55,50))
 
         self.scanVar1 = tk.StringVar()

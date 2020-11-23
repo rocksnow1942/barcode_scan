@@ -1,20 +1,16 @@
 from io import BytesIO
 import time
-import picamera
 from PIL import Image, ImageDraw, ImageFont
 from pylibdmtx.pylibdmtx import decode
 from datetime import datetime
 from .utils import indexToGridName
 from .cameraConfig import scanWindow,scanGrid
-# Create an array representing a 1280x720 image of
-# a cross through the center of the display. The shape of
-# the array must be of the form (height, width, color)
-# a = np.zeros((2400,3200 , 3), dtype=np.uint8)
-# a[240, :, :] = 0xff
-# a[:, 320, :] = 0xff
-
-
-class Camera(picamera.PiCamera):
+try:
+    from picamera import PiCamera
+except ImportError:
+    PiCamera = object
+ 
+class Camera(PiCamera):
     def __init__(self):
         super().__init__()
         self.loadSettings()
@@ -186,3 +182,5 @@ if __name__ == '__main__':
 
     c = Camera()
     c.manualRun()
+
+
