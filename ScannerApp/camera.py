@@ -26,6 +26,7 @@ class Camera(PiCamera):
     def stop(self):        
         if self.overlay:
             self.remove_overlay(self.overlay)
+            self.overlay = None
         self.stop_preview()
 
     def loadSettings(self):
