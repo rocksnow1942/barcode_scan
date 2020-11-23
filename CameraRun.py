@@ -87,12 +87,11 @@ class Camera(picamera.PiCamera):
                 action = input("action:\n")
                 if action == 's':
                     self.snapshot()
-                elif action == 'scan':
-                    result = self.scan()
-                    print(result)
+                 
                 else:
                     result = self.scan()
-                    print(result)
+                    for i in result:
+                        print(result)
                     
         finally:
             self.remove_overlay(self.overlay)
