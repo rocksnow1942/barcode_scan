@@ -97,9 +97,13 @@ class Camera(picamera.PiCamera):
                     self.drawOverlay(highlights = [int(action)])
                 else:                     
                     result = self.scan()
-                    for i in result:
-                        print(i)
-                    
+                    highlights = []
+                    for idx,res in enumerate(result):
+                        if len(res)!=10 or (not res.isnumeric()):
+                            highlights.append(idx)
+                    self.drawOverlay(highlights)
+                        
+
         finally:
             self.remove_overlay(self.overlay)
         
