@@ -31,14 +31,14 @@ class Camera(picamera.PiCamera):
         
     def loadSettings(self):
         resW = 3200
-        previewW = 400
+        previewW = 300
         scanRatio = 0.8
         self.resolution = (resW,resW*3//4)
         
         self.framerate = 24
         
         # preview window is rotated 90 deg and mirrorred.
-        self._previewWindow = (10,10,previewW,previewW*4//3)
+        self._previewWindow = (30,10,previewW,previewW*4//3)
         
         self._scanGrid = (12,8)
         
@@ -59,12 +59,15 @@ class Camera(picamera.PiCamera):
         xo,yo,pw,ph = self._previewWindow
         s1,s2,s3,s4 = self._scanWindow
         resolutionX, resolutionY = self.resolution
-        scan_offset_x = s1 * pw // resolutionX
-        scan_offset_y = s2 * ph // resolutionY
-        gridWidth = (s3-s1) * pw / resolutionX // (column -1)
-        gridHeight = (s4-s2) * ph / resolutionY // (row -1)    
-        gridW_ = gridWidth*0.9//2
-        gridH_ = gridHeight*0.9//2
+        # because preview is flipped and rotated,
+        # the x overlay offset caused by scan window is actually y offset of scan window
+        scan_offset_y = s1 * pw // resolutionX #in preview window, overlay offset caused by scan window in y direction.
+        scan_offset_x = s2 * ph // resolutionY #in preview window, overlay offset caused by scan window in x direction.
+        
+        gridHeight = (s3-s1) * pw / resolutionX // (column -1) # overlay grid height in preview window, this is actually scan window width.
+        gridWidth = (s4-s2) * ph / resolutionY // (row -1)   # overlay grid height in preview window, this is actually scan window height. 
+        gridW_ = gridWidth*0.9//2 # half width of actually drawing box in preview window
+        gridH_ = gridHeight*0.9//2 # half width of actually drawing box in preview window
         for r in range(row):
             for c in range(column):
                 idx = r * column + c
@@ -72,8 +75,8 @@ class Camera(picamera.PiCamera):
                     outline = (255,0,0,180)
                 else:
                     outline = (0,255,0,180)
-                posx = c * gridWidth + xo + scan_offset_x
-                posy = r * gridHeight + yo + scan_offset_y
+                posy = c * gridWidth + yo + scan_offset_x
+                posx = r * gridHeight + xo + scan_offset_y
                 padDraw.rectangle([posx-gridW_,posy-gridH_,posx+gridW_,posy+gridH_],
                                    fill=(0,0,0,0),outline=outline,width=1)
         return pad
