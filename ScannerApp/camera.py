@@ -165,16 +165,12 @@ class Camera(PiCamera):
         self.capture(self._captureStream, format='jpeg')
         self._captureStream.seek(0)
         img = Image.open(self._captureStream)
-        results = []
         for panel in self.yieldPanel(img):
             # name = indexToGridName(idx, self._scanGrid)
             # panel.save(f'./out/{name}.jpeg')
-            res = self.decodePanel(panel)
+            yield self.decodePanel(panel)
             # print(f"{name}:{res}")
-            results.append(res)
-
-        return results
-
+        
     def indexToName(self, idx):
         return indexToGridName(idx, grid=self._scanGrid, direction=self.direction)
 

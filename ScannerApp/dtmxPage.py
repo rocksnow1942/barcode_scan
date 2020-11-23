@@ -148,7 +148,10 @@ class DTMXPage(tk.Frame,PageMixin):
         self.specimenError = []
         self.specimenResult = []
         def read():
-            self.specimenResult = self.camera.scan()
+            total = self.camera._scanGrid[0]* self.camera._scanGrid[1]
+            for i, res in enumerate(self.camera.scan()):
+                self.displaymsg(f'Reading {i} / {total} {"."*(i%5)}')
+                self.specimenResult.append(res)
             self.specimenError = []
             for idx, res in enumerate(self.specimenResult):
                 if not validateBarcode(res,'specimen'):
