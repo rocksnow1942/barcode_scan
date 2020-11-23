@@ -134,9 +134,11 @@ class Camera(picamera.PiCamera):
         results = []
 
         for idx, panel in enumerate(self.yieldPanel(img)):
-            panel.save(f'./out/{indexToGridName(idx,self._scanGrid)}.jpeg')
-            # res = self.decodePanel(panel)
-            # results.append(res)
+            name = indexToGridName(idx,self._scanGrid)
+            panel.save(f'./out/{name}.jpeg')
+            res = self.decodePanel(panel)
+            print(f"{name}:{res}")
+            results.append(res)
         return results
 
 c = Camera()
