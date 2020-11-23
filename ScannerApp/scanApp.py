@@ -8,7 +8,7 @@ class ScannerApp(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title('Scanner App')
-        self.geometry('800x480+0+-10')
+        self.geometry('800x480+0+-50')
         self.resizable(0,0)
         
 
