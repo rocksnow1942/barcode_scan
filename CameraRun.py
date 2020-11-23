@@ -47,7 +47,7 @@ class Camera(picamera.PiCamera):
                             scanX + gridSize*(self._scanGrid[0]-1),
                             scanY + gridSize*(self._scanGrid[1]-1))
         
-        self.font = ImageFont.truetype("arial.ttf", 30)
+        self.font = ImageFont.truetype("arial.ttf", 26)
         # self.contrast = 100
     
     def drawOverlay(self,highlights = []):
