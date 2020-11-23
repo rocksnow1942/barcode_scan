@@ -99,7 +99,7 @@ class DTMXPage(tk.Frame,PageMixin):
                 self.scanVar2.set('')
                 self.saveBtn['state'] = 'disabled'
             else:
-                self.displaymsg(f"Unrecoginzed: {code}", 'red')
+                self.displaymsg(f"Invalid: {code}", 'red')
         else:
             self.displaymsg('Read specimen to start.')    
     
@@ -164,6 +164,6 @@ class DTMXPage(tk.Frame,PageMixin):
             idx = self.specimenError[0]
             self.displaymsg(f"Rescan {self.camera.indexToName(idx)}: {self.specimenResult[idx]}",'red')
         elif self.specimenResult:
-            self.displaymsg('All specimen correct.','green')
+            self.displaymsg('All specimen correct. Scan Plate.','green')
         else:
             self.displaymsg('Read Specimen To Start.')

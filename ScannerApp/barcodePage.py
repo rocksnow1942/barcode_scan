@@ -70,8 +70,11 @@ class BarcodePage(tk.Frame,PageMixin):
                 self.scan2.config(bg='green', fg='white')
             else:
                 self.displaymsg('Confirm/Cancel before new scan.', 'red')
+        elif code == 'clear':
+            self.scanVar1.set('')
+            self.scanVar2.set('')
         else:
-            self.displaymsg(f"Unrecoginzed: {code}", 'red')
+            self.displaymsg(f"Invalid: {code}", 'red')
  
     def confirm(self):
         code1 = self.scanVar1.get()
