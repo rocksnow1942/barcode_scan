@@ -107,7 +107,7 @@ class Camera(picamera.PiCamera):
                 
     def yieldPanel(self,img):
         "yield each panel in a image"
-        oversample = 1.8
+        oversample = 1.4
         column,row = self._scanGrid
         s1,s2,s3,s4 = self._scanWindow
         gridWidth = (s3-s1)//(column-1)
