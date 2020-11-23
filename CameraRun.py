@@ -61,8 +61,8 @@ class Camera(picamera.PiCamera):
         resolutionX, resolutionY = self.resolution
         # because preview is flipped and rotated,
         # the x overlay offset caused by scan window is actually y offset of scan window
-        scan_offset_y = s1 * pw // resolutionX #in preview window, overlay offset caused by scan window in y direction.
-        scan_offset_x = s2 * ph // resolutionY #in preview window, overlay offset caused by scan window in x direction.
+        scan_offset_y = s1 * ph // resolutionX #in preview window, overlay offset caused by scan window in y direction.
+        scan_offset_x = s2 * pw // resolutionY #in preview window, overlay offset caused by scan window in x direction.
         
         gridHeight = (s3-s1) * ph / resolutionX // (column -1) # overlay grid height in preview window, this is actually scan window width.
         gridWidth = (s4-s2) * pw / resolutionY // (row -1)   # overlay grid height in preview window, this is actually scan window height. 
