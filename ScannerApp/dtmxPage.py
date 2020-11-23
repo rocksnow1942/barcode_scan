@@ -2,9 +2,7 @@ import tkinter as tk
 from .utils import validateBarcode,PageMixin
 # https://pypi.org/project/keyboard/
 from threading import Thread
-from .camera import Camera
  
-
 
 class DTMXPage(tk.Frame,PageMixin):
     def __init__(self, parent, master):
@@ -13,7 +11,7 @@ class DTMXPage(tk.Frame,PageMixin):
         self.specimenResult = []
         self.master = master
         self.create_widgets()
-        self.camera = Camera()
+        self.camera = master.camera
         self.initKeyboard()
         
         
@@ -60,7 +58,8 @@ class DTMXPage(tk.Frame,PageMixin):
         self.keySequence = []
         self.tkraise()
         self.focus_set()
-        self.camera.start(self.specimenError)
+        self.camera.start()
+        self.camera.drawOverlay(self.specimenError)
         
     def goToHome(self):        
         self.camera.stop()
@@ -149,7 +148,7 @@ class DTMXPage(tk.Frame,PageMixin):
         self.specimenResult = []
         def read():
             total = self.camera._scanGrid[0]* self.camera._scanGrid[1]
-            for i, res in enumerate(self.camera.scan()):
+            for i, res in enumerate(self.camera.scanDTMX()):
                 self.displaymsg(f'{"."*(i%4)} Reading {i:3} / {total:3} {"."*(i%4)}')
                 self.specimenResult.append(res)
             self.specimenError = []

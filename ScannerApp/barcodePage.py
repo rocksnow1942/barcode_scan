@@ -1,5 +1,6 @@
 import tkinter as tk
 from .utils import validateBarcode,PageMixin
+from threading import Thread
 # https://pypi.org/project/keyboard/
  
 
@@ -7,53 +8,58 @@ class BarcodePage(tk.Frame,PageMixin):
     def __init__(self, parent, master):
         super().__init__(parent)
         self.master = master
+        self.camera = master.camera
         self.create_widgets()
         self.initKeyboard()
 
     def create_widgets(self):
-        tk.Label(self, text='From Plate:', font=(
-            'Arial', 40)).place(anchor='ne', x=390, y=20)
+        tk.Label(self, text='From:', font=(
+            'Arial', 38)).place(x=340, y=20)
         # grid(column=0,row=0,sticky='e',padx=(40,10),pady=(55,50))
 
         self.scanVar1 = tk.StringVar()
         # self.scanVar1.set('1234567890')
 
         self.scan1 = tk.Label(
-            self, textvariable=self.scanVar1, font=('Arial', 40))
-        self.scan1.place(x=410, y=20)  # grid(column=1,row=0,)
+            self, textvariable=self.scanVar1, font=('Arial', 38))
+        self.scan1.place(x=450, y=20)  # grid(column=1,row=0,)
 
-        tk.Label(self, text='To Plate:', font=('Arial', 40)
-                 ).place(anchor='ne', x=390, y=110)
+        tk.Label(self, text='To:', font=('Arial', 38)
+                 ).place(x=340, y=110)
         # .grid(column=0,row=1,sticky='e',padx=(40,10),pady=(55,50))
         self.scanVar2 = tk.StringVar()
         # self.scanVar2.set('1234567890')
         self.scan2 = tk.Label(
-            self, textvariable=self.scanVar2, font=('Arial', 40))
-        self.scan2.place(x=410, y=110)  # .grid(column=1,row=1,)
+            self, textvariable=self.scanVar2, font=('Arial', 38))
+        self.scan2.place(x=450, y=110)  # .grid(column=1,row=1,)
 
-        tk.Button(self, text='Confirm', font=('Arial', 60), command=self.confirm).place(
-            x=20, y=210, height=150, width=360)  # grid(column=0,row=2,sticky='n',pady=(55,50))
-        tk.Button(self, text='Cancel', font=('Arial', 60), command=self.cancel).place(
-            x=420, y=210, height=150, width=360)  # grid(column=1,row=2,sticky='n',padx=(50,20),pady=(55,50))
+
+        self.clearBtn = tk.Button(self, text='Clear', font=('Arial', 40), command=self.cancel)
+        self.clearBtn.place(x=340, y=210, height=150, width=210)  
+        self.saveBtn = tk.Button(self, text='Save', font=('Arial', 40), command=self.save)
+        self.saveBtn.place(x=570, y=210, height=150, width=210) 
 
         self.msgVar = tk.StringVar()
-        self.msg = tk.Label(self, textvariable=self.msgVar, font=('Arial', 30))
-        # self.msgVar.set('Confirm/Cancel before new scan')
-        # grid(column=0,row=3,columnspan=2)
-        self.msg.place(x=20, y=380, width=660)
+        self.msg = tk.Label(self, textvariable=self.msgVar, font=('Arial', 20))
+        
+        self.msg.place(x=20, y=430, width=660)
 
-        tk.Button(self, text='Back', font=('Arial', 25),
-                  command=self.goToHome).place(x=680, y=390, height=50,width=90)
+        self.backBtn = tk.Button(self, text='Back', font=('Arial', 25),
+                  command=self.goToHome)
+        self.backBtn.place(x=680, y=390, height=50,width=90)
 
     def showPage(self):
         self.keySequence = []
-         
         self.tkraise()
         self.focus_set()
+        self.camera.start()
+        self.barcodeThread = Thread(target=self.camera.liveScanBarcode,args=(self.keyboardCb,))
+        self.barcodeThread.start()
       
         
     def goToHome(self):
-         
+        self.camera.stop()
+        self.barcodeThread.join()
         self.master.showPage('HomePage')
         self.keySequence = []
 
@@ -76,7 +82,7 @@ class BarcodePage(tk.Frame,PageMixin):
         else:
             self.displaymsg(f"Invalid: {code}", 'red')
  
-    def confirm(self):
+    def save(self):
         code1 = self.scanVar1.get()
         code2 = self.scanVar2.get()
         if code1 and code2:

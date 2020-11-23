@@ -2,6 +2,7 @@ from io import BytesIO
 import time
 from PIL import Image, ImageDraw, ImageFont
 from pylibdmtx.pylibdmtx import decode
+from pyzbar.pyzbar import decode as zbarDecode
 from datetime import datetime
 from .utils import indexToGridName
 from .cameraConfig import scanWindow, scanGrid, directon
@@ -17,13 +18,15 @@ class Camera(PiCamera):
         self.loadSettings()
         self._captureStream = BytesIO()
         self.overlay = None
+        self.startLiveBarcode = False
 
-    def start(self,highlights):
+    def start(self,):
+        self.startLiveBarcode = True
         self.start_preview(
             fullscreen=False, window=self._previewWindow, hflip=True, rotation=90)
-        self.drawOverlay(highlights)
 
     def stop(self):
+        self.startLiveBarcode = False
         if self.overlay:
             self.remove_overlay(self.overlay)
             self.overlay = None
@@ -106,6 +109,7 @@ class Camera(PiCamera):
 
         if self.overlay:
             self.remove_overlay(self.overlay)
+            self.overlay = None
         self.overlay = self.add_overlay(pad.tobytes(), size=pad.size, layer=3)
 
     def manualRun(self):
@@ -159,7 +163,7 @@ class Camera(PiCamera):
         self.capture(
             f'./ScannerApp/snapshots/{datetime.now().strftime("%H:%M:%S")}.jpeg', format='jpeg')
 
-    def scan(self):
+    def scanDTMX(self):
         "perform a capture and decode"
         self._captureStream.seek(0)
         self.capture(self._captureStream, format='jpeg')
@@ -170,7 +174,47 @@ class Camera(PiCamera):
             # panel.save(f'./out/{name}.jpeg')
             yield self.decodePanel(panel)
             # print(f"{name}:{res}")
-        
+    
+    def translatePoint(self,x,y):
+        "map a point xy to preview window corrdinate"
+        xo, yo, pw, ph = self._previewWindow
+        resolutionX, resolutionY = self.resolution
+        pY = x * ph // resolutionX + yo
+        pX = y * pw // resolutionY + xo
+        return pX,pY
+    
+    def liveScanBarcode(self,cb=print):
+        "use pyzbar to scan"
+        self.lastRead = None
+        while True:
+            time.sleep(0.2)
+            self._captureStream.seek(0)
+            if not self.startLiveBarcode:
+                break
+            self.capture(self._captureStream,format='jpeg',) #resize=(c_w,c_h)
+            self._captureStream.seek(0)
+            img = Image.open(self._captureStream)
+            code = zbarDecode(img)
+            if code and self.startLiveBarcode:                
+                res = code[0].data.decode()
+                if res != self.lastRead:
+                    cb(res)
+                self.lastRead = res
+                xy = [ self.translatePoint(i.x,i.y) for i in code.polygon]            
+                pad = Image.new('RGBA',(800,480))
+                padDraw = ImageDraw.Draw(pad)
+                padDraw.polygon(xy,fill=(0,0,0,0),outline=(0,255,0,255))
+                
+                if self.overlay:
+                    self.remove_overlay(self.overlay)
+                    self.overlay = None
+                self.overlay = self.add_overlay(pad.tobytes(),size=pad.size, layer=3)
+            else:
+                if self.overlay:
+                    self.remove_overlay(self.overlay)
+                    self.overlay = None
+                
+         
     def indexToName(self, idx):
         return indexToGridName(idx, grid=self._scanGrid, direction=self.direction)
 

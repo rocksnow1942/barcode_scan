@@ -1,6 +1,7 @@
 import tkinter as tk
 from .barcodePage import BarcodePage
 from .dtmxPage import DTMXPage
+from .camera import Camera
 
 class ScannerApp(tk.Tk):
     def __init__(self):
@@ -8,6 +9,7 @@ class ScannerApp(tk.Tk):
         self.title('Scanner App')
         self.geometry('800x480+0+-30')#-30
         self.resizable(0,0)
+        self.camera = Camera()
         
 
         container = tk.Frame(self)
