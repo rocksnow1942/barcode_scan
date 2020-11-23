@@ -11,6 +11,8 @@ class ScannerApp(tk.Tk):
         
 
         container = tk.Frame(self)
+        container.bind("<Key>",self.keyboardListener)
+        self.keySequence = []
         
         container.pack(side='top',fill='both',expand=True)
         container.grid_rowconfigure(0, weight=1)
@@ -22,6 +24,9 @@ class ScannerApp(tk.Tk):
             self.pages[F.__name__].grid(row=0, column=0, sticky="nsew")
         
         self.showPage('HomePage')
+    
+    def keyboardListener(self,e):
+        print(e)
         
     def showPage(self,page):
         self.pages[page].showPage()

@@ -19,8 +19,8 @@ class DTMXPage(tk.Frame):
         self.create_widgets()
         self.stopScan = False
         self.camera = Camera()
-        self.bind("<Key>",self.scanlistener)
-        self.keySequence = []
+        self.bind("<Key>",self.keyboardListener)
+        
 
     def create_widgets(self):
         tk.Label(self, text='LP:', font=(
@@ -61,12 +61,13 @@ class DTMXPage(tk.Frame):
         self.stopScan = False
         # Thread(target=self.scanlistener, daemon=True).start()
         self.tkraise()
-        self.camera.start()
+        self.focus_set()
+        # self.camera.start()
         
 
     def goToHome(self):
         self.stopScan = True
-        self.camera.stop()
+        # self.camera.stop()
         self.master.showPage('HomePage')
 
     def displaymsg(self, msg, color='black'):
