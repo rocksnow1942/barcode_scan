@@ -9,12 +9,13 @@ from .camera import Camera
 class DTMXPage(tk.Frame,PageMixin):
     def __init__(self, parent, master):
         super().__init__(parent)
+        self.specimenError = []
+        self.specimenResult = []
         self.master = master
         self.create_widgets()
         self.camera = Camera()
         self.initKeyboard()
-        self.specimenError = []
-        self.specimenResult = []
+        
         
 
     def create_widgets(self):
