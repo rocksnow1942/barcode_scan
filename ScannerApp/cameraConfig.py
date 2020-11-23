@@ -2,4 +2,4 @@
 scanWindow = None 
 
 # column , row
-scanGrid = (12,8)
+scanGrid = (6,4)
