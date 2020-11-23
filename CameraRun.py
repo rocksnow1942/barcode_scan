@@ -73,12 +73,14 @@ class Camera(picamera.PiCamera):
                 idx = r * column + c
                 if idx in highlights:
                     outline = (255,0,0,180)
+                    width = 3
                 else:
                     outline = (0,255,0,180)
+                    wdidth = 1
                 posy = c * gridHeight + yo + scan_offset_y
                 posx = r * gridWidth + xo + scan_offset_x
                 padDraw.rectangle([posx-gridW_,posy-gridH_,posx+gridW_,posy+gridH_],
-                                   fill=(0,0,0,0),outline=outline,width=1)
+                                   fill=(0,0,0,0),outline=outline,width=width)
         if self.overlay:
             self.remove_overlay(self.overlay)        
         self.overlay = self.add_overlay(pad.tobytes(),size=pad.size,layer=3)
