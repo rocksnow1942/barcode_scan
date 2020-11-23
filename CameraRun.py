@@ -48,7 +48,8 @@ class Camera(picamera.PiCamera):
                             scanY + gridSize*(self._scanGrid[1]-1))
         
         self.font = ImageFont.truetype("arial.ttf", 26)
-        self.contrast = 100
+        # self.contrast = 100
+        # self.brightness = 50
     
     def drawOverlay(self,highlights = []):
         pad = Image.new('RGBA',(800,480))
@@ -85,11 +86,11 @@ class Camera(picamera.PiCamera):
         for r in range(row):
             posx = r * gridWidth + xo + scan_offset_x
             label = 'ABCDEFGH'[r]
-            padDraw.text((posx,labelY),label,anchor='md',font=self.font,fill=(22,100,8,233))                           
+            padDraw.text((posx,labelY),label,anchor='md',font=self.font,fill=(255,0,0,255))                           
         labelX = xo + scan_offset_x - gridW_ - 5
         for c in range(column):
             posy = c * gridHeight + yo + scan_offset_y
-            padDraw.text((labelX,posy),f'{c+1}',anchor='rm',font=self.font,fill=(22,100,8,233)) 
+            padDraw.text((labelX,posy),f'{c+1}',anchor='rm',font=self.font,fill=(255,0,0,255)) 
             
         
         if self.overlay:
