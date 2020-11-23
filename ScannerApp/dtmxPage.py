@@ -52,13 +52,14 @@ class DTMXPage(tk.Frame,PageMixin):
         self.backBtn = tk.Button(self, text='Back', font=('Arial', 25),
                   command=self.goToHome)
         self.backBtn.place(x=680, y=390, height=50,width=90)
+
+        self.specimenRescanPrompt()
     
     def showPage(self):
-        self.displaymsg('Read Specimen To Start.')
         self.keySequence = []
         self.tkraise()
         self.focus_set()
-        self.camera.start()
+        self.camera.start(self.specimenError)
         
     def goToHome(self):        
         self.camera.stop()
@@ -161,5 +162,7 @@ class DTMXPage(tk.Frame,PageMixin):
         if self.specimenError:
             idx = self.specimenError[0]
             self.displaymsg(f"Rescan {self.camera.indexToName(idx)}: {self.specimenResult[idx]}",'red')
-        else:
+        elif self.specimenResult:
             self.displaymsg('All specimen correct.','green')
+        else:
+            self.displaymsg('Read Specimen To Start.')
