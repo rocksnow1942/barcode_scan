@@ -6,7 +6,7 @@ class ScannerApp(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title('Scanner App')
-        self.geometry('800x480+0+0')#-30
+        self.geometry('800x480+0+-30')#-30
         self.resizable(0,0)
         
 
@@ -41,5 +41,9 @@ class HomePage(tk.Frame):
             x=20,y=40,height=150,width=360)
         tk.Button(self,text='Plate',font=('Arial',60),command=lambda:self.master.showPage('BarcodePage')).place(
             x=420,y=40,height=150,width=360)
+
+        tk.Button(self,text='Exit',font=('Arial',60),command=lambda:self.master.on_closing).place(
+            x=20,y=210,height=150,width=360)
+
     def showPage(self):
         self.tkraise()
