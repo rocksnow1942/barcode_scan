@@ -35,8 +35,7 @@ class Camera(picamera.PiCamera):
 
     def loadSettings(self):
         resW = 1200
-        previewW = 300
-        
+        previewW = 300        
         self.resolution = (resW, resW*3//4)
         self.framerate = 24
         # preview window is rotated 90 deg and mirrorred.

@@ -21,8 +21,8 @@ class DTMXPage(tk.Frame):
         self.camera = Camera()
         
     def create_widgets(self):
-        tk.Label(self, text='Camera Live', font=(
-            'Arial', 16)).place(x=20, y=20,width=300,height=400)
+        tk.Label(self, text='L', font=(
+            'Arial', 40)).place(x=20, y=20,width=300,height=400)
         # grid(column=0,row=0,sticky='e',padx=(40,10),pady=(55,50))
 
         self.scanVar1 = tk.StringVar()
@@ -32,7 +32,7 @@ class DTMXPage(tk.Frame):
             self, textvariable=self.scanVar1, font=('Arial', 40))
         self.scan1.place(x=410, y=20)  # grid(column=1,row=0,)
 
-        tk.Label(self, text='To Plate:', font=('Arial', 40)
+        tk.Label(self, text='S', font=('Arial', 40)
                  ).place(anchor='ne', x=390, y=110)
         # .grid(column=0,row=1,sticky='e',padx=(40,10),pady=(55,50))
         self.scanVar2 = tk.StringVar()
@@ -41,18 +41,19 @@ class DTMXPage(tk.Frame):
             self, textvariable=self.scanVar2, font=('Arial', 40))
         self.scan2.place(x=410, y=110)  # .grid(column=1,row=1,)
 
-        tk.Button(self, text='Confirm', font=('Arial', 60), command=self.confirm).place(
+        tk.Button(self, text='Read', font=('Arial', 40), command=self.read).place(
             x=20, y=210, height=150, width=360)  # grid(column=0,row=2,sticky='n',pady=(55,50))
-        tk.Button(self, text='Cancel', font=('Arial', 60), command=self.cancel).place(
+        tk.Button(self, text='Save', font=('Arial', 40), command=self.confirm).place(
             x=420, y=210, height=150, width=360)  # grid(column=1,row=2,sticky='n',padx=(50,20),pady=(55,50))
 
         self.msgVar = tk.StringVar()
-        self.msg = tk.Label(self, textvariable=self.msgVar, font=('Arial', 30))
-        # self.msgVar.set('Confirm/Cancel before new scan')
-        # grid(column=0,row=3,columnspan=2)
-        self.msg.place(x=50, y=380, width=600)
+        self.msg = tk.Label(self, textvariable=self.msgVar, font=('Arial', 20))
+        self.msgVar.set('message for dtmx page')
+        
+        self.msg.place(x=20, y=430, width=660)
 
-        tk.Button(self, text='Back', font=('Arial', 25), command=self.goToHome)
+        tk.Button(self, text='Back', font=('Arial', 25),
+                  command=self.goToHome).place(x=680, y=390, height=50,width=90)
     
     def showPage(self):
         self.stopScan = False
@@ -102,10 +103,12 @@ class DTMXPage(tk.Frame):
             self.scanVar1.set('')
             self.scanVar2.set('')
 
-    def cancel(self):
-        self.scanVar1.set('')
-        self.scanVar2.set('')
-        self.scan1.config(bg='white')
-        self.scan2.config(bg='white')
-        self.displaymsg('', 'white')
- 
+    def read(self):
+        "read camera"
+        result = self.camera.scan()
+        highlights = []
+        for idx, res in enumerate(result):
+            if not validateBarcode(res,'specimen'):
+                highlights.append(idx)
+        self.camera.drawOverlay(highlights)
+        
