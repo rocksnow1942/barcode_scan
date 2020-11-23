@@ -26,8 +26,8 @@ class Camera(picamera.PiCamera):
         self.loadSettings()
         self.start_preview(fullscreen=False,window = self._previewWindow,hflip=True,rotation=90)
         self._captureStream = BytesIO()
-        self.overlay = self.drawOverlay()
-        self.add_overlay(self.overlay.tobytes(),size=self.overlay.size,layer=3)
+        self.overlay = None
+        self.drawOverlay()
         
     def loadSettings(self):
         resW = 3200
@@ -79,19 +79,21 @@ class Camera(picamera.PiCamera):
                 posx = r * gridHeight + xo + scan_offset_y
                 padDraw.rectangle([posx-gridW_,posy-gridH_,posx+gridW_,posy+gridH_],
                                    fill=(0,0,0,0),outline=outline,width=1)
-        return pad
+        if self.overlay:
+            self.remove_overlay(self.overlay)        
+        self.overlay = self.add_overlay(pad.tobytes(),size=pad.size,layer=3)
     
     def run(self):
         ""
         try:
             while True:                
                 time.sleep(1)
-                action = input("action:\n")
+                action = input("action:\n").strip()
                 if action == 's':
                     self.snapshot()
-                 
-                else:
-                     
+                elif action.isnumeric():
+                    self.drawOverlay(highlights = [int(action)])
+                else:                     
                     result = self.scan()
                     for i in result:
                         print(i)
