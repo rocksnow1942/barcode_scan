@@ -1,7 +1,7 @@
 from io import BytesIO
 import time
 import picamera
-from PIL import Image,ImageDraw
+from PIL import Image,ImageDraw,ImageFont
 from pylibdmtx.pylibdmtx import decode
 from datetime import datetime
 # Create an array representing a 1280x720 image of
@@ -47,6 +47,7 @@ class Camera(picamera.PiCamera):
                             scanX + gridSize*(self._scanGrid[0]-1),
                             scanY + gridSize*(self._scanGrid[1]-1))
         
+        self.font = ImageFont.truetype("arial.ttf", 30)
         # self.contrast = 100
     
     def drawOverlay(self,highlights = []):
@@ -78,6 +79,19 @@ class Camera(picamera.PiCamera):
                 posx = r * gridWidth + xo + scan_offset_x
                 padDraw.rectangle([posx-gridW_,posy-gridH_,posx+gridW_,posy+gridH_],
                                    fill=(0,0,0,0),outline=outline,width=width)
+        
+        # label A1 - H12
+        labelY = yo + scan_offset_y - gridH_
+        for r in range(row):
+            posx = r * gridWidth + xo + scan_offset_x
+            label = 'ABCDEFGH'[r]
+            padDraw.text((posx,labelY),label,anchor='md',font=self.font,fill=(0,0,255,233))                           
+        labelX = xo + scan_offset_x - gridW_ - 5
+        for c in range(column):
+            posy = c * gridHeight + yo + scan_offset_y
+            padDraw.text((labelX,posy),f'{c+1}',anchor='rm',font=self.font,fill=(0,0,255,233)) 
+            
+        
         if self.overlay:
             self.remove_overlay(self.overlay)        
         self.overlay = self.add_overlay(pad.tobytes(),size=pad.size,layer=3)
@@ -125,8 +139,8 @@ class Camera(picamera.PiCamera):
         if res:
             return res[0].data.decode()
         return ""
-        # px,py = panel.size
-    
+
+        # px,py = panel.size    
         # for size in [100,200]:
         #     resize = panel.resize((size,int(size*py/px)))
         #     res = decode(resize,max_count=1)
