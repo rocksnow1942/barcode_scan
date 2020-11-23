@@ -23,11 +23,10 @@ class Camera(PiCamera):
             fullscreen=False, window=self._previewWindow, hflip=True, rotation=90)
         self.drawOverlay()
 
-    def stop(self):
-        self.stop_preview()
+    def stop(self):        
         if self.overlay:
             self.remove_overlay(self.overlay)
-
+        self.stop_preview()
 
     def loadSettings(self):
         resW = 1200

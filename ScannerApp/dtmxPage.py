@@ -22,7 +22,7 @@ class DTMXPage(tk.Frame):
         
     def create_widgets(self):
         tk.Label(self, text='LP:', font=(
-            'Arial', 40)).place(anchor='ne',x=390, y=20, )
+            'Arial', 40)).place( x=340, y=20, )
         # grid(column=0,row=0,sticky='e',padx=(40,10),pady=(55,50))
 
         self.scanVar1 = tk.StringVar()
@@ -30,16 +30,16 @@ class DTMXPage(tk.Frame):
 
         self.scan1 = tk.Label(
             self, textvariable=self.scanVar1, font=('Arial', 40))
-        self.scan1.place(x=410, y=20)  # grid(column=1,row=0,)
+        self.scan1.place(x=420, y=20)  # grid(column=1,row=0,)
 
         tk.Label(self, text='SP:', font=('Arial', 40)
-                 ).place(anchor='ne', x=390, y=110)
+                 ).place(  x=340, y=110)
         # .grid(column=0,row=1,sticky='e',padx=(40,10),pady=(55,50))
         self.scanVar2 = tk.StringVar()
         # self.scanVar2.set('1234567890')
         self.scan2 = tk.Label(
             self, textvariable=self.scanVar2, font=('Arial', 40))
-        self.scan2.place(x=410, y=110)  # .grid(column=1,row=1,)
+        self.scan2.place(x=420, y=110)  # .grid(column=1,row=1,)
 
         tk.Button(self, text='Read', font=('Arial', 40), command=self.read).place(
             x=340, y=210, height=150, width=210)  # grid(column=0,row=2,sticky='n',pady=(55,50))
