@@ -27,6 +27,7 @@ for img in imgs:
     max_count = 1
     )
     times.append(time.perf_counter()-t0)
+    res = res or res[0].data.decode()
     print(f"{row}{col}: {res}")
     
 print(f"Average time: {sum(times)/len(times)}")
