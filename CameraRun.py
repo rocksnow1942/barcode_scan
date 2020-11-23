@@ -4,8 +4,7 @@ import picamera
 import numpy as np
 from PIL import Image,ImageOps,ImageDraw,ImagePath
 import numpy as np
-from pyzbar.pyzbar import ZBarSymbol
-from pyzbar.pyzbar import decode
+
 from pylibdmtx.pylibdmtx import decode
 from datetime import datetime
 # Create an array representing a 1280x720 image of
@@ -114,8 +113,9 @@ class Camera(picamera.PiCamera):
 
     def decodePanel(self,panel):
         px,py = panel.size
+    
         for size in [100,200]:
-            resize = panel.resize((size,size*py//px))
+            resize = panel.resize((size,int(size*py/px)))
             res = decode(resize,max_count=1)
             if res:
                 return res[0].data.decode()
