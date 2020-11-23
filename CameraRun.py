@@ -34,9 +34,9 @@ class Camera(picamera.PiCamera):
         previewW = 600
         scanRatio = 0.8
         self.resolution = (resW,resW*3//4)
-        self.rotation = 90
+        # self.rotation = 90
         self.framerate = 24
-        self.hflip = True
+        # self.hflip = True
         self._previewWindow = (10,10,previewW,previewW*3//4)
         
         self._scanGrid = (12,8)
