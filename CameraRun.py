@@ -1,10 +1,7 @@
 from io import BytesIO
 import time
 import picamera
-import numpy as np
-from PIL import Image,ImageOps,ImageDraw,ImagePath
-import numpy as np
-
+from PIL import Image,ImageDraw
 from pylibdmtx.pylibdmtx import decode
 from datetime import datetime
 # Create an array representing a 1280x720 image of
@@ -30,7 +27,7 @@ class Camera(picamera.PiCamera):
         self.drawOverlay()
         
     def loadSettings(self):
-        resW = 3200
+        resW = 1200
         previewW = 300
         scanRatio = 0.8
         self.resolution = (resW,resW*3//4)
@@ -123,14 +120,18 @@ class Camera(picamera.PiCamera):
                 yield img.crop((posx-cropW,posy-cropH,posx+cropW,posy+cropH))
 
     def decodePanel(self,panel):
-        px,py = panel.size
-    
-        for size in [100,200]:
-            resize = panel.resize((size,int(size*py/px)))
-            res = decode(resize,max_count=1)
-            if res:
-                return res[0].data.decode()
+        res = decode(panel,max_count=1)
+        if res:
+            return res[0].data.decode()
         return ""
+        # px,py = panel.size
+    
+        # for size in [100,200]:
+        #     resize = panel.resize((size,int(size*py/px)))
+        #     res = decode(resize,max_count=1)
+        #     if res:
+        #         return res[0].data.decode()
+        # return ""
 
     def snapshot(self,):
         "capture and save a image"
