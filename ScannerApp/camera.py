@@ -20,12 +20,13 @@ class Camera(picamera.PiCamera):
         self.loadSettings()
         self._captureStream = BytesIO()
         self.overlay = None
-        self.drawOverlay()
+        
 
     def start(self):
         self.start_preview(
             fullscreen=False, window=self._previewWindow, hflip=True, rotation=90)
-
+        self.drawOverlay()
+        
     def stop(self):
         self.stop_preview()
         if self.overlay:
