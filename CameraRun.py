@@ -15,7 +15,11 @@ from datetime import datetime
 # a[240, :, :] = 0xff
 # a[:, 320, :] = 0xff
 
-def indexToGridName(indxe)
+def indexToGridName(index,grid=(12,8)):
+    row = idx//grid[0] + 1
+    col = idx - (row-1) * grid[0]
+    rowM = 'ABCDEFGHIJKLMN'[row-1]
+    return f"{rowM}{col}"
 
 class Camera(picamera.PiCamera):
     def __init__(self):
@@ -81,7 +85,7 @@ class Camera(picamera.PiCamera):
             while True:                
                 time.sleep(1)
                 action = input("action:\n")
-                if action == 'snapshot':
+                if action == 's':
                     self.snapshot()
                 elif action == 'scan':
                     result = self.scan()
@@ -130,8 +134,10 @@ class Camera(picamera.PiCamera):
         results = []
 
         for idx, panel in enumerate(self.yieldPanel(img)):
-            
-            panel.save(f'{indexToGridName(idx,self._scanGrid)}.jpeg')
+            row = idx//self._scanGrid[0] + 1
+            col = idx - (row-1) * self._scanGrid[0]
+            rowM = 
+            panel.save(f'{rowM}-{col}.jpeg')
             res = self.decodePanel(panel)
             results.append(res)
         return results
