@@ -48,10 +48,10 @@ class BarcodePage(tk.Frame):
         self.msg = tk.Label(self, textvariable=self.msgVar, font=('Arial', 30))
         # self.msgVar.set('Confirm/Cancel before new scan')
         # grid(column=0,row=3,columnspan=2)
-        self.msg.place(x=50, y=380, width=222)
+        self.msg.place(x=20, y=380, width=660)
 
         tk.Button(self, text='Back', font=('Arial', 25),
-                  command=self.goToHome).place(x=670, y=400, height=50,width=100)
+                  command=self.goToHome).place(x=680, y=390, height=50,width=90)
 
     def showPage(self):
         self.stopScan = False
