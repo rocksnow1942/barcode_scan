@@ -194,18 +194,22 @@ class Camera(PiCamera):
             self.capture(self._captureStream,format='jpeg',) #resize=(c_w,c_h)
             self._captureStream.seek(0)
             img = Image.open(self._captureStream)
-            codes = zbarDecode(img)
-            if codes and self.startLiveBarcode:    
-                code = codes[0]            
+            code = zbarDecode(img)
+            if code and self.startLiveBarcode:    
                 res = code[0].data.decode()
                 if res != self.lastRead:
                     cb(res)
-                self.lastRead = res
-                xy = [ self.translatePoint(i.x,i.y) for i in code.polygon]            
+                self.lastRead = res                
                 pad = Image.new('RGBA',(800,480))
                 padDraw = ImageDraw.Draw(pad)
-                padDraw.polygon(xy,fill=(0,0,0,0),outline=(0,255,0,255))
-                
+                xy = [self.translatePoint(i.x, i.y) for i in code[0].polygon]
+                padDraw.polygon(xy, fill=(0, 0, 0, 0),
+                                outline=(255, 0, 0, 205))
+                for de in code[1:]:
+                    xy = [self.translatePoint(i.x, i.y) for i in de.polygon]
+                    padDraw.polygon(xy, fill=(0, 0, 0, 0),
+                                    outline=(255, 0, 0, 205))
+
                 if self.overlay:
                     self.remove_overlay(self.overlay)
                     self.overlay = None
