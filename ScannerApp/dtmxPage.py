@@ -30,7 +30,7 @@ class DTMXPage(tk.Frame):
 
         self.scan1 = tk.Label(
             self, textvariable=self.scanVar1, font=('Arial', 40))
-        self.scan1.place(x=420, y=20)  # grid(column=1,row=0,)
+        self.scan1.place(x=450, y=20)  # grid(column=1,row=0,)
 
         tk.Label(self, text='SP:', font=('Arial', 40)
                  ).place(  x=340, y=110)
@@ -39,7 +39,7 @@ class DTMXPage(tk.Frame):
         # self.scanVar2.set('1234567890')
         self.scan2 = tk.Label(
             self, textvariable=self.scanVar2, font=('Arial', 40))
-        self.scan2.place(x=420, y=110)  # .grid(column=1,row=1,)
+        self.scan2.place(x=450, y=110)  # .grid(column=1,row=1,)
 
         tk.Button(self, text='Read', font=('Arial', 40), command=self.read).place(
             x=340, y=210, height=150, width=210)  # grid(column=0,row=2,sticky='n',pady=(55,50))
