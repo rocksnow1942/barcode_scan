@@ -159,13 +159,13 @@ class Camera(picamera.PiCamera):
         self._captureStream.seek(0)
         img = Image.open(self._captureStream)
         results = []
-        t0 = time.perf_counter()
         for idx, panel in enumerate(self.yieldPanel(img)):
             name = indexToGridName(idx,self._scanGrid)
             panel.save(f'./out/{name}.jpeg')
             res = self.decodePanel(panel)
             print(f"{name}:{res}")
             results.append(res)
+       
         return results
 
 c = Camera()
