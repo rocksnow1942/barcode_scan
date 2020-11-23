@@ -89,6 +89,9 @@ class Camera(picamera.PiCamera):
                     self.snapshot()
                  
                 else:
+                    for i in range(10):
+                        print(f'count down {10-i}')
+                        time.sleep(1)
                     result = self.scan()
                     for i in result:
                         print(result)
