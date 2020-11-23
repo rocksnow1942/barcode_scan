@@ -17,7 +17,7 @@ from datetime import datetime
 
 def indexToGridName(index,grid=(12,8)):
     row = index//grid[0] + 1
-    col = index - (row-1) * grid[0]
+    col = index - (row-1) * grid[0] + 1
     rowM = 'ABCDEFGHIJKLMN'[row-1]
     return f"{rowM}{col}"
 
@@ -89,12 +89,10 @@ class Camera(picamera.PiCamera):
                     self.snapshot()
                  
                 else:
-                    for i in range(10):
-                        print(f'count down {10-i}')
-                        time.sleep(1)
+                     
                     result = self.scan()
                     for i in result:
-                        print(result)
+                        print(i)
                     
         finally:
             self.remove_overlay(self.overlay)
