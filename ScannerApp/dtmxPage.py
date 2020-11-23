@@ -42,9 +42,9 @@ class DTMXPage(tk.Frame):
         self.scan2.place(x=410, y=110)  # .grid(column=1,row=1,)
 
         tk.Button(self, text='Read', font=('Arial', 40), command=self.read).place(
-            x=20, y=210, height=150, width=360)  # grid(column=0,row=2,sticky='n',pady=(55,50))
+            x=340, y=210, height=150, width=210)  # grid(column=0,row=2,sticky='n',pady=(55,50))
         tk.Button(self, text='Save', font=('Arial', 40), command=self.confirm).place(
-            x=420, y=210, height=150, width=360)  # grid(column=1,row=2,sticky='n',padx=(50,20),pady=(55,50))
+            x=570, y=210, height=150, width=210)  # grid(column=1,row=2,sticky='n',padx=(50,20),pady=(55,50))
 
         self.msgVar = tk.StringVar()
         self.msg = tk.Label(self, textvariable=self.msgVar, font=('Arial', 20))
@@ -111,4 +111,3 @@ class DTMXPage(tk.Frame):
             if not validateBarcode(res,'specimen'):
                 highlights.append(idx)
         self.camera.drawOverlay(highlights)
-        
