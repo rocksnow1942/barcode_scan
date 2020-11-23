@@ -204,7 +204,7 @@ class Camera(PiCamera):
                 padDraw = ImageDraw.Draw(pad)
                 xy = [self.translatePoint(i.x, i.y) for i in code[0].polygon]
                 padDraw.polygon(xy, fill=(0, 0, 0, 0),
-                                outline=(255, 0, 0, 205))
+                                outline=(0, 255, 0, 205))
                 for de in code[1:]:
                     xy = [self.translatePoint(i.x, i.y) for i in de.polygon]
                     padDraw.polygon(xy, fill=(0, 0, 0, 0),
