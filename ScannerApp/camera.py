@@ -26,7 +26,7 @@ class Camera(picamera.PiCamera):
         self.start_preview(
             fullscreen=False, window=self._previewWindow, hflip=True, rotation=90)
         self.drawOverlay()
-        
+
     def stop(self):
         self.stop_preview()
         if self.overlay:
@@ -41,7 +41,7 @@ class Camera(picamera.PiCamera):
         self.framerate = 24
         # preview window is rotated 90 deg and mirrorred.
         self._previewWindow = (20, 20, previewW, previewW*4//3)
-        self._scanGrid = (12, 8)
+        self._scanGrid = scanGrid
 
         if scanWindow:
             self._scanWindow = scanWindow
