@@ -135,7 +135,7 @@ class Camera(picamera.PiCamera):
                 yield img.crop((posx-cropW,posy-cropH,posx+cropW,posy+cropH))
 
     def decodePanel(self,panel):
-        res = decode(panel,max_count=1)
+        res = decode(panel,max_count=1,deviation=5,threshold=50)
         if res:
             return res[0].data.decode()
         return ""
