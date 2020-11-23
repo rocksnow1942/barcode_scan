@@ -150,7 +150,7 @@ class DTMXPage(tk.Frame,PageMixin):
         def read():
             total = self.camera._scanGrid[0]* self.camera._scanGrid[1]
             for i, res in enumerate(self.camera.scan()):
-                self.displaymsg(f'Reading {i} / {total} {"."*(i%5)}')
+                self.displaymsg(f'{"."*(i%4)} Reading {i} / {total} {"."*(i%4)}')
                 self.specimenResult.append(res)
             self.specimenError = []
             for idx, res in enumerate(self.specimenResult):
