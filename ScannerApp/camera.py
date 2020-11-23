@@ -4,39 +4,40 @@ from PIL import Image, ImageDraw, ImageFont
 from pylibdmtx.pylibdmtx import decode
 from datetime import datetime
 from .utils import indexToGridName
-from .cameraConfig import scanWindow,scanGrid
+from .cameraConfig import scanWindow, scanGrid, directon
 try:
     from picamera import PiCamera
 except ImportError:
     PiCamera = object
- 
+
+
 class Camera(PiCamera):
     def __init__(self):
         super().__init__()
         self.loadSettings()
         self._captureStream = BytesIO()
         self.overlay = None
-        
 
     def start(self):
         self.start_preview(
             fullscreen=False, window=self._previewWindow, hflip=True, rotation=90)
         self.drawOverlay()
 
-    def stop(self):        
+    def stop(self):
         if self.overlay:
             self.remove_overlay(self.overlay)
             self.overlay = None
         self.stop_preview()
 
     def loadSettings(self):
-        resW = 1200
-        previewW = 300        
+        resW = 1200  # picture resultion, width. always maintain 4:3
+        previewW = 300  # preview width
         self.resolution = (resW, resW*3//4)
         self.framerate = 24
         # preview window is rotated 90 deg and mirrorred.
         self._previewWindow = (20, 20, previewW, previewW*4//3)
         self._scanGrid = scanGrid
+        self.direction = directon  # tube scan from top or bottom.
 
         if scanWindow:
             self._scanWindow = scanWindow
@@ -90,9 +91,11 @@ class Camera(PiCamera):
 
         # label A1 - H12
         labelY = yo + scan_offset_y - gridH_
+        rowIndex = "ABCDEFGHIJKLMNOPQRST"[0:row]
+        rowIndex = rowIndex if self.direction == 'top' else rowIndex[::-1]
         for r in range(row):
             posx = r * gridWidth + xo + scan_offset_x
-            label = 'ABCDEFGH'[r]
+            label = rowIndex[r]
             padDraw.text((posx, labelY), label, anchor='md',
                          font=self.font, fill=(255, 0, 0, 255))
         labelX = xo + scan_offset_x - gridW_ - 5
@@ -154,7 +157,7 @@ class Camera(PiCamera):
     def snapshot(self,):
         "capture and save a image"
         self.capture(
-            f'./{datetime.now().strftime("%H:%M:%S")} Snapshot.jpeg', format='jpeg')
+            f'./ScannerApp/snapshots/{datetime.now().strftime("%H:%M:%S")}.jpeg', format='jpeg')
 
     def scan(self):
         "perform a capture and decode"
@@ -162,9 +165,6 @@ class Camera(PiCamera):
         self.capture(self._captureStream, format='jpeg')
         self._captureStream.seek(0)
         img = Image.open(self._captureStream)
-
-        img.save(f'./ScannerApp/snapshots/{datetime.now().strftime("%H:%M:%S")}.jpeg')
-
         results = []
         for panel in self.yieldPanel(img):
             # name = indexToGridName(idx, self._scanGrid)
@@ -175,12 +175,11 @@ class Camera(PiCamera):
 
         return results
 
-    
+    def indexToName(self, idx):
+        return indexToGridName(idx, grid=self._scanGrid, direction=self.direction)
 
 
 if __name__ == '__main__':
 
     c = Camera()
     c.manualRun()
-
-

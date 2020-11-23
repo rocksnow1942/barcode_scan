@@ -1,7 +1,7 @@
 import tkinter as tk
 from .utils import validateBarcode,PageMixin
 # https://pypi.org/project/keyboard/
-
+from threading import Thread
 from .camera import Camera
  
 
@@ -11,9 +11,10 @@ class DTMXPage(tk.Frame,PageMixin):
         super().__init__(parent)
         self.master = master
         self.create_widgets()
-         
         self.camera = Camera()
         self.initKeyboard()
+        self.specimenError = []
+        self.specimenResult = []
         
 
     def create_widgets(self):
@@ -37,27 +38,71 @@ class DTMXPage(tk.Frame,PageMixin):
             self, textvariable=self.scanVar2, font=('Arial', 40))
         self.scan2.place(x=440, y=110)  # .grid(column=1,row=1,)
 
-        tk.Button(self, text='Read', font=('Arial', 40), command=self.read).place(
-            x=340, y=210, height=150, width=210)  # grid(column=0,row=2,sticky='n',pady=(55,50))
-        tk.Button(self, text='Save', font=('Arial', 40), command=self.confirm).place(
-            x=570, y=210, height=150, width=210)  # grid(column=1,row=2,sticky='n',padx=(50,20),pady=(55,50))
+        self.readBtn = tk.Button(self, text='Read', font=('Arial', 40), command=self.read)
+        self.readBtn.place(x=340, y=210, height=150, width=210)  
+        self.saveBtn = tk.Button(self, text='Save', font=('Arial', 40), command=self.save)
+        self.saveBtn.place(x=570, y=210, height=150, width=210) 
+        self.saveBtn['state'] = 'disabled'
 
         self.msgVar = tk.StringVar()
         self.msg = tk.Label(self, textvariable=self.msgVar, font=('Arial', 20))
-        self.msgVar.set('message for dtmx page')
         
         self.msg.place(x=20, y=430, width=660)
 
-        tk.Button(self, text='Back', font=('Arial', 25),
-                  command=self.goToHome).place(x=680, y=390, height=50,width=90)
+        self.backBtn = tk.Button(self, text='Back', font=('Arial', 25),
+                  command=self.goToHome)
+        self.backBtn.place(x=680, y=390, height=50,width=90)
     
+    def showPage(self):
+        self.displaymsg('Read Specimen To Start.')
+        self.keySequence = []
+        self.tkraise()
+        self.focus_set()
+        self.camera.start()
+        
+    def goToHome(self):        
+        self.camera.stop()
+        self.master.showPage('HomePage')
+        self.keySequence = []
     
 
     def keyboardCb(self,code):
         ""
-        print(f"received code {code}")
-    
+        if code == 'snap':
+            self.camera.snapshot()
+            return
+        if self.specimenError:
+            self.specimenResult[self.specimenError[0]] = code
+            if validateBarcode(code,'specimen'):
+                self.specimenError.pop(0)
+            self.specimenRescanPrompt()
 
+        elif self.specimenResult:
+            if validateBarcode(code, 'plate'):
+                if code == self.scanVar1.get():
+                    self.displaymsg('Same code!', 'red')
+                    self.scan1.config(bg='red')
+                elif not self.scanVar1.get():
+                    self.scanVar1.set(code)
+                    self.scan1.config(bg='green', fg='white')
+                    self.saveBtn['state'] = 'normal'
+                elif not self.scanVar2.get():
+                    self.scanVar2.set(code)
+                    self.scan2.config(bg='green', fg='white')
+                    self.saveBtn['state'] = 'normal'
+                else:
+                    self.displaymsg('Save before new scan.', 'red')
+            elif code == 'clear':
+                self.scanVar1.set('')
+                self.scanVar2.set('')
+            else:
+                self.displaymsg(f"Unrecoginzed: {code}", 'red')
+        else:
+            self.displaymsg('Read specimen to start.')
+
+
+        
+    
     def displayScan(self, code):
         if code == self.scanVar1.get():
             self.displaymsg('Same code!', 'red')
@@ -71,19 +116,40 @@ class DTMXPage(tk.Frame,PageMixin):
         else:
             self.displaymsg('Confirm/Cancel before new scan.', 'red')
 
-    def confirm(self):
+    def save(self):
         code1 = self.scanVar1.get()
         code2 = self.scanVar2.get()
-        if code1 and code2:
-            self.displaymsg(f'Link {code1} to {code2}', 'green')
+        sL = len(self.specimenResult)
+        if code1 and sL:
+            self.displaymsg(f'{code1}/{code2} <-> {sL} specimen', 'green')
             self.scanVar1.set('')
             self.scanVar2.set('')
+            self.saveBtn['state'] = 'disabled'
 
     def read(self):
         "read camera"
-        result = self.camera.scan()
-        highlights = []
-        for idx, res in enumerate(result):
-            if not validateBarcode(res,'specimen'):
-                highlights.append(idx)
-        self.camera.drawOverlay(highlights)
+        self.scanVar1.set('')
+        self.scanVar2.set('')
+        self.backBtn['state'] = 'disabled'
+        self.saveBtn['state'] = 'disabled'
+        self.readBtn['state'] = 'disabled'
+        self.specimenError = []
+        self.specimenResult = []
+        def read():
+            self.specimenResult = self.camera.scan()
+            self.specimenError = []
+            for idx, res in enumerate(self.specimenResult):
+                if not validateBarcode(res,'specimen'):
+                    self.specimenError.append(idx)
+            self.camera.drawOverlay(self.specimenError)
+            self.specimenRescanPrompt()
+            self.backBtn['state'] = 'normal'
+            self.readBtn['state'] = 'normal'
+        Thread(target=read,).start()
+
+    def specimenRescanPrompt(self):
+        if self.specimenError:
+            idx = self.specimenError[0]
+            self.displaymsg(f"Rescan {self.camera.indexToName(idx)}: {self.specimenResult[idx]}",'red')
+        else:
+            self.displaymsg('All specimen correct.','green')

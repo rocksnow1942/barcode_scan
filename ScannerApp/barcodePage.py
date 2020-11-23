@@ -77,7 +77,7 @@ class BarcodePage(tk.Frame,PageMixin):
         code1 = self.scanVar1.get()
         code2 = self.scanVar2.get()
         if code1 and code2:
-            self.displaymsg(f'Link {code1} to {code2}', 'green')
+            self.displaymsg(f'{code1} <-> {code2}', 'green')
             self.scanVar1.set('')
             self.scanVar2.set('')
 

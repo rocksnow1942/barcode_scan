@@ -2,4 +2,8 @@
 scanWindow = None 
 
 # column , row
-scanGrid = (6,4)
+scanGrid = (12,8)
+
+
+# reading top or bottom.
+directon = 'top'
