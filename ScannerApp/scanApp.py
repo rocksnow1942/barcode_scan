@@ -1,6 +1,4 @@
 import tkinter as tk
-import keyboard
-from threading import Thread
 from .barcodePage import BarcodePage
 from .dtmxPage import DTMXPage
 
@@ -25,10 +23,6 @@ class ScannerApp(tk.Tk):
         
         self.showPage('HomePage')
         
-
-        
-    def moveWindow(self,e):
-        print(e)
     def showPage(self,page):
         self.pages[page].showPage()
         
@@ -43,7 +37,7 @@ class HomePage(tk.Frame):
         self.master = master
         self.create_widgets()
     def create_widgets(self):
-        tk.Button(self,text='Specimen',font=('Arial',60),command=lambda:self.master.showPage('DTMXPage')).place(
+        tk.Button(self,text='Specimen',font=('Arial',55),command=lambda:self.master.showPage('DTMXPage')).place(
             x=20,y=40,height=150,width=360)
         tk.Button(self,text='Plate',font=('Arial',60),command=lambda:self.master.showPage('BarcodePage')).place(
             x=420,y=40,height=150,width=360)

@@ -4,6 +4,7 @@ from threading import Thread
 from .utils import validateBarcode
 # https://pypi.org/project/keyboard/
 
+from .camera import Camera
 
 def get_next_scan():
     events = keyboard.record(until='enter')
@@ -17,10 +18,11 @@ class DTMXPage(tk.Frame):
         self.master = master
         self.create_widgets()
         self.stopScan = False
+        self.camera = Camera()
         
     def create_widgets(self):
-        tk.Label(self, text='From Plate:', font=(
-            'Arial', 40)).place(anchor='ne', x=390, y=20)
+        tk.Label(self, text='Camera Live', font=(
+            'Arial', 16)).place(x=20, y=20,width=300,height=400)
         # grid(column=0,row=0,sticky='e',padx=(40,10),pady=(55,50))
 
         self.scanVar1 = tk.StringVar()
@@ -51,15 +53,18 @@ class DTMXPage(tk.Frame):
         self.msg.place(x=50, y=380, width=600)
 
         tk.Button(self, text='Back', font=('Arial', 25), command=self.goToHome)
-
-    def startScan(self):
+    
+    def showPage(self):
         self.stopScan = False
         Thread(target=self.scanlistener, daemon=True).start()
+        self.tkraise()
+        self.camera.start()
         
 
     def goToHome(self):
         self.stopScan = True
-        self.master.show_page('HomePage')
+        self.camera.stop()
+        self.master.showPage('HomePage')
 
     def displaymsg(self, msg, color='black'):
         self.msgVar.set(msg)
