@@ -25,14 +25,27 @@ class Camera(picamera.PiCamera):
         self.add_overlay(self.overlay.tobytes(),size=self.overlay.size,layer=3)
         
     def loadSettings(self):
-        self.resolution = (3200,2400)
+        resW = 3200
+        previewW = 780
+        scanRatio = 0.8
+        self.resolution = (resW,resW*3//4)
         self.rotation = 90
         self.framerate = 24
         self.hflip = True
-        self._previewWindow = (10,10,320,240)
-        self._scanWindow = (400,436,2800,1964)
+        self._previewWindow = (10,10,previewW,previewW*3//4)
+        
         self._scanGrid = (12,8)
-        self.contrast = 100
+        
+        scanX = resW * (1-scanRatio) // 2
+        gridSize = resW * scanRatio // (self._scanGrid[0]-1)
+        scanY = (resW*3/4 - gridSize*(self._scanGrid[1]-1))//2
+        
+        
+        self._scanWindow = (scanX,scanY,
+                            scanX + gridSize*(self._scanGrid[0]-1),
+                            scanY + gridSize*(self._scanGrid[1]-1))
+        
+        # self.contrast = 100
     
     def drawOverlay(self,highlights = []):
         pad = Image.new('RGBA',(800,480))
