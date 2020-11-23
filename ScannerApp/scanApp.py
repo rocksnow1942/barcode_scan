@@ -9,6 +9,9 @@ class ScannerApp(tk.Tk):
         super().__init__()
         self.title('Scanner App')
         self.geometry('800x480+0+0')
+        self.resizable(0,0)
+        
+
         container = tk.Frame(self)
 
         container.pack(side='top',fill='both',expand=True)
