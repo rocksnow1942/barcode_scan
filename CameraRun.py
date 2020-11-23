@@ -15,6 +15,8 @@ from datetime import datetime
 # a[240, :, :] = 0xff
 # a[:, 320, :] = 0xff
 
+def indexToGridName(indxe)
+
 class Camera(picamera.PiCamera):
     def __init__(self):
         super().__init__()
@@ -126,7 +128,10 @@ class Camera(picamera.PiCamera):
         self._captureStream.seek(0)
         img = Image.open(self._captureStream)
         results = []
-        for panel in self.yieldPanel(img):
+
+        for idx, panel in enumerate(self.yieldPanel(img)):
+            
+            panel.save(f'{indexToGridName(idx,self._scanGrid)}.jpeg')
             res = self.decodePanel(panel)
             results.append(res)
         return results
