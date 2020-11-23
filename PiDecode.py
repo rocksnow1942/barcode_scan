@@ -9,10 +9,10 @@ for row in 'ABCDEFGH':
     for col in range(1,13):
         file = f"./out/{row}{col}.jpeg"
         img = Image.open(file)
-        imgs.append(img)
+        imgs.append((f"{row}{col}",img))
 
 times = []
-for img in imgs:
+for name,img in imgs:
     t0 = time.perf_counter()
     res = decode(
     img,
@@ -28,7 +28,7 @@ for img in imgs:
     )
     times.append(time.perf_counter()-t0)
     res = res and res[0].data.decode()
-    print(f"{row}{col}: {res}")
+    print(f"{name}:{res}")
     
 print(f"Average time: {sum(times)/len(times)}")
 print(f"Max time: {max(times)}")

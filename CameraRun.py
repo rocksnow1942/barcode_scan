@@ -48,7 +48,7 @@ class Camera(picamera.PiCamera):
                             scanY + gridSize*(self._scanGrid[1]-1))
         
         self.font = ImageFont.truetype("arial.ttf", 26)
-        # self.contrast = 100
+        self.contrast = 100
     
     def drawOverlay(self,highlights = []):
         pad = Image.new('RGBA',(800,480))
@@ -135,7 +135,7 @@ class Camera(picamera.PiCamera):
                 yield img.crop((posx-cropW,posy-cropH,posx+cropW,posy+cropH))
 
     def decodePanel(self,panel):
-        res = decode(panel,max_count=1,deviation=5,threshold=50)
+        res = decode(panel,max_count=1,deviation=5,)
         if res:
             return res[0].data.decode()
         return ""
