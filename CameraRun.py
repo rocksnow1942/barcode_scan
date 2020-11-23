@@ -26,7 +26,7 @@ class Camera(picamera.PiCamera):
         
     def loadSettings(self):
         resW = 3200
-        previewW = 780
+        previewW = 600
         scanRatio = 0.8
         self.resolution = (resW,resW*3//4)
         self.rotation = 90
