@@ -54,7 +54,7 @@ class Camera(picamera.PiCamera):
                                 scanX + gridSize*(self._scanGrid[0]-1),
                                 scanY + gridSize*(self._scanGrid[1]-1))
 
-        self.font = ImageFont.truetype("./arial.ttf", 26)
+        self.font = ImageFont.truetype("./ScannerApp/arial.ttf", 26)
         # self.contrast = 100
         # self.brightness = 50
 
@@ -167,7 +167,7 @@ class Camera(picamera.PiCamera):
         self._captureStream.seek(0)
         img = Image.open(self._captureStream)
 
-        img.save(f'./snapshots/{datetime.now().strftime("%H:%M:%S")}.jpeg')
+        img.save(f'./ScannerApp/snapshots/{datetime.now().strftime("%H:%M:%S")}.jpeg')
 
         results = []
         for panel in self.yieldPanel(img):
