@@ -15,18 +15,7 @@ def indexToGridName(index,grid=(12,8),direction='top'):
 
 
 class PageMixin():
-    def showPage(self):
-        self.keySequence = []
-        # Thread(target=self.scanlistener, daemon=True).start()
-        self.tkraise()
-        self.focus_set()
-        # self.camera.start()
-        
-    def goToHome(self):
-        
-        # self.camera.stop()
-        self.master.showPage('HomePage')
-        self.keySequence = []
+    
 
     def displaymsg(self, msg, color='black'):
         self.msgVar.set(msg)
@@ -37,12 +26,7 @@ class PageMixin():
         self.bind("<Key>",self.scanlistener)
         self.keySequence = []
 
-    def scanlistener(self,e):
-        # while True:            
-            # res = get_next_scan()
-        # if self.stopScan:
-        #     self.keySequence = []
-        #     return
+    def scanlistener(self,e):       
         char = e.char
         if char.isalnum():
             self.keySequence.append(char)
@@ -50,7 +34,4 @@ class PageMixin():
             if self.keySequence:
                 self.keyboardCb(''.join(self.keySequence))
             self.keySequence=[]
-        # if validateBarcode(res,'plate'):
-        #     self.displayScan(res)
-        # else:
-        #     self.displaymsg(f"Unrecoginzed: {res}", 'red')
+        return 'break'
