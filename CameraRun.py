@@ -34,17 +34,17 @@ class Camera(picamera.PiCamera):
         previewW = 400
         scanRatio = 0.8
         self.resolution = (resW,resW*3//4)
-        # self.rotation = 90
+        
         self.framerate = 24
-        # self.hflip = True
-        self._previewWindow = (10,10,previewW,previewW*3//4)
+        
+        # preview window is rotated 90 deg and mirrorred.
+        self._previewWindow = (10,10,previewW,previewW*4//3)
         
         self._scanGrid = (12,8)
         
         scanX = resW * (1-scanRatio) // 2
         gridSize = resW * scanRatio // (self._scanGrid[0]-1)
         scanY = (resW*3/4 - gridSize*(self._scanGrid[1]-1))//2
-        
         
         self._scanWindow = (scanX,scanY,
                             scanX + gridSize*(self._scanGrid[0]-1),
