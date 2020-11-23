@@ -16,12 +16,11 @@ for img in imgs:
     t0 = time.perf_counter()
     res = decode(
     img,
-    timeout = 5000,
-    gap_size=50,
+    timeout = None,
     shrink = 1,
     shape = None,
-    deviation = 90,
-    threshold = None,
+    deviation = 5,
+    threshold = 50,
     min_edge = None,
     max_edge = None,
     corrections=None,
