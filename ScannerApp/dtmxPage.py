@@ -19,7 +19,9 @@ class DTMXPage(tk.Frame):
         self.create_widgets()
         self.stopScan = False
         self.camera = Camera()
-        
+        self.bind("<Key>",self.scanlistener)
+        self.keySequence = []
+
     def create_widgets(self):
         tk.Label(self, text='LP:', font=(
             'Arial', 40)).place( x=340, y=20, )
@@ -57,7 +59,7 @@ class DTMXPage(tk.Frame):
     
     def showPage(self):
         self.stopScan = False
-        Thread(target=self.scanlistener, daemon=True).start()
+        # Thread(target=self.scanlistener, daemon=True).start()
         self.tkraise()
         self.camera.start()
         
@@ -72,15 +74,17 @@ class DTMXPage(tk.Frame):
         if color:
             self.msg.config(fg=color)
 
-    def scanlistener(self):
-        while True:            
-            res = get_next_scan()
-            if self.stopScan:
-                break
-            if validateBarcode(res,'plate'):
-                self.displayScan(res)
-            else:
-                self.displaymsg(f"Unrecoginzed: {res}", 'red')
+    def scanlistener(self,e):
+        # while True:            
+            # res = get_next_scan()
+        if self.stopScan:
+            self.keySequence = []
+            return
+        print(e)
+        # if validateBarcode(res,'plate'):
+        #     self.displayScan(res)
+        # else:
+        #     self.displaymsg(f"Unrecoginzed: {res}", 'red')
 
     def displayScan(self, code):
         if code == self.scanVar1.get():
