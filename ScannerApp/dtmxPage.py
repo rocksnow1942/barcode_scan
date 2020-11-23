@@ -75,6 +75,7 @@ class DTMXPage(tk.Frame,PageMixin):
             self.specimenResult[self.specimenError[0]] = code
             if validateBarcode(code,'specimen'):
                 self.specimenError.pop(0)
+                self.camera.drawOverlay(self.specimenError)
             self.specimenRescanPrompt()
 
         elif self.specimenResult:
