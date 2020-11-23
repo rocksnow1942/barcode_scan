@@ -24,7 +24,7 @@ class Camera(picamera.PiCamera):
     def __init__(self):
         super().__init__()
         self.loadSettings()
-        self.start_preview(fullscreen=False,window = self._previewWindow)
+        self.start_preview(fullscreen=False,window = self._previewWindow,hflip=True,rotation=90)
         self._captureStream = BytesIO()
         self.overlay = self.drawOverlay()
         self.add_overlay(self.overlay.tobytes(),size=self.overlay.size,layer=3)
