@@ -21,8 +21,8 @@ class DTMXPage(tk.Frame):
         self.camera = Camera()
         
     def create_widgets(self):
-        tk.Label(self, text='L', font=(
-            'Arial', 40)).place(x=20, y=20,width=300,height=400)
+        tk.Label(self, text='LP:', font=(
+            'Arial', 40)).place(x=390, y=20,width=300,height=400)
         # grid(column=0,row=0,sticky='e',padx=(40,10),pady=(55,50))
 
         self.scanVar1 = tk.StringVar()
@@ -32,7 +32,7 @@ class DTMXPage(tk.Frame):
             self, textvariable=self.scanVar1, font=('Arial', 40))
         self.scan1.place(x=410, y=20)  # grid(column=1,row=0,)
 
-        tk.Label(self, text='S', font=('Arial', 40)
+        tk.Label(self, text='SP:', font=('Arial', 40)
                  ).place(anchor='ne', x=390, y=110)
         # .grid(column=0,row=1,sticky='e',padx=(40,10),pady=(55,50))
         self.scanVar2 = tk.StringVar()
