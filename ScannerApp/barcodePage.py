@@ -77,9 +77,16 @@ class BarcodePage(tk.Frame,PageMixin):
         code1 = self.scanVar1.get()
         code2 = self.scanVar2.get()
         if code1 and code2:
-            self.displaymsg(f'{code1} <-> {code2}', 'green')
-            self.scanVar1.set('')
-            self.scanVar2.set('')
+            try:
+                self.displaymsg(f'{code1} <-> {code2}', 'green')
+                self.scanVar1.set('')
+                self.scanVar2.set('')
+            except Exception as e:
+                print(e)
+                self.displaymsg(f"Error:{e}")
+
+    def saveData(self,p1,p2):
+        print(f'Linked {p1} to {p2}')
 
     def cancel(self):
         self.scanVar1.set('')

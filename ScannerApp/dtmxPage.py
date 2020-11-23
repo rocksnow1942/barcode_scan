@@ -85,7 +85,6 @@ class DTMXPage(tk.Frame,PageMixin):
                 elif not self.scanVar1.get():
                     self.scanVar1.set(code)
                     self.scan1.config(bg='green', fg='white')
-                    self.saveBtn['state'] = 'normal'
                 elif not self.scanVar2.get():
                     self.scanVar2.set(code)
                     self.scan2.config(bg='green', fg='white')
@@ -95,13 +94,11 @@ class DTMXPage(tk.Frame,PageMixin):
             elif code == 'clear':
                 self.scanVar1.set('')
                 self.scanVar2.set('')
+                self.saveBtn['state'] = 'disabled'
             else:
                 self.displaymsg(f"Unrecoginzed: {code}", 'red')
         else:
-            self.displaymsg('Read specimen to start.')
-
-
-        
+            self.displaymsg('Read specimen to start.')    
     
     def displayScan(self, code):
         if code == self.scanVar1.get():
@@ -120,11 +117,23 @@ class DTMXPage(tk.Frame,PageMixin):
         code1 = self.scanVar1.get()
         code2 = self.scanVar2.get()
         sL = len(self.specimenResult)
-        if code1 and sL:
-            self.displaymsg(f'{code1}/{code2} <-> {sL} specimen', 'green')
-            self.scanVar1.set('')
-            self.scanVar2.set('')
-            self.saveBtn['state'] = 'disabled'
+        if code1 and code2 and sL:
+            try:
+                self.saveData(self.specimenResult,code1,code2)
+                self.displaymsg(f'{code1}/{code2} <-> {sL} specimen', 'green')
+                self.scanVar1.set('')
+                self.scanVar2.set('')
+                self.saveBtn['state'] = 'disabled'
+                self.specimenResult = []
+            except Exception as e:
+                print(e)
+                self.displaymsg(f"Error:{e}")
+            
+    def saveData(self,specimen,p1,p2):
+        "save data to server"
+        print(specimen)
+        print(f'Saved to {p1},{p2}')
+
 
     def read(self):
         "read camera"
