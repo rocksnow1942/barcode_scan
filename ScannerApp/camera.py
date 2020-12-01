@@ -225,7 +225,3 @@ class Camera(PiCamera):
     def indexToName(self, idx):
         return indexToGridName(idx, grid=self._scanGrid, direction=self.direction)
 
-
-if __name__ == '__main__':
-    c = Camera()
-    c.manualRun()

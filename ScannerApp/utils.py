@@ -46,4 +46,5 @@ class PageMixin():
             if self.keySequence:
                 self.keyboardCb(''.join(self.keySequence))
             self.keySequence=[]
+        #return 'break' to stop keyboard event propagation.
         return 'break'
