@@ -1,8 +1,6 @@
 import tkinter as tk
 from .utils import validateBarcode, PageMixin
-# https://pypi.org/project/keyboard/
 from threading import Thread
-
 
 class DTMXPage(tk.Frame, PageMixin):
     def __init__(self, parent, master):
