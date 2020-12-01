@@ -136,7 +136,6 @@ class DTMXPage(tk.Frame,PageMixin):
         print(specimen)
         print(f'Saved to {p1},{p2}')
 
-
     def read(self):
         "read camera"
         self.scanVar1.set('')
@@ -162,6 +161,7 @@ class DTMXPage(tk.Frame,PageMixin):
         Thread(target=read,).start()
 
     def specimenRescanPrompt(self):
+        "display in msg box to prompt scan the failed sample."
         if self.specimenError:
             idx = self.specimenError[0]
             self.displaymsg(f"Rescan {self.camera.indexToName(idx)}: {self.specimenResult[idx]}",'red')

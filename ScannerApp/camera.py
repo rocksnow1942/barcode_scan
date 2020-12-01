@@ -5,7 +5,7 @@ from pylibdmtx.pylibdmtx import decode
 from pyzbar.pyzbar import decode as zbarDecode
 from datetime import datetime
 from .utils import indexToGridName
-from .cameraConfig import scanWindow, scanGrid, directon
+
 try:
     from picamera import PiCamera
 except ImportError:
@@ -13,9 +13,9 @@ except ImportError:
 
 
 class Camera(PiCamera):
-    def __init__(self):
+    def __init__(self,config):
         super().__init__()
-        self.loadSettings()
+        self.loadSettings(config)
         self._captureStream = BytesIO()
         self.overlay = None
         self.startLiveBarcode = False
@@ -32,28 +32,31 @@ class Camera(PiCamera):
             self.overlay = None
         self.stop_preview()
 
-    def loadSettings(self):
-        resW = 1200  # picture resultion, width. always maintain 4:3
+    def loadSettings(self,config):
+        "load settings from config.ini"
+        scanWindow = eval(config['cameraConfig']['scanWindow'])
+        scanGrid = eval(config['cameraConfig']['scanGrid'])
+        direction = eval(config['cameraConfig']['direction'])
+        resW = eval(config['cameraConfig']['scanResolution']) # picture resultion, width. always maintain 4:3
         previewW = 300  # preview width
         self.resolution = (resW, resW*3//4)
         self.framerate = 24
         # preview window is rotated 90 deg and mirrorred.
         self._previewWindow = (20, 20, previewW, previewW*4//3)
         self._scanGrid = scanGrid
-        self.direction = directon  # tube scan from top or bottom.
+        self.direction = direction  # tube scan from top or bottom.
 
         if scanWindow:
             self._scanWindow = scanWindow
         else:
             scanRatio = 0.8
-            scanX = resW * (1-scanRatio) // 2
-            gridSize = resW * scanRatio // (self._scanGrid[0]-1)
+            scanX = (resW * (1-scanRatio) )// 2
+            gridSize =( resW * scanRatio) // (self._scanGrid[0]-1)
             scanY = (resW*3/4 - gridSize*(self._scanGrid[1]-1))//2
 
             self._scanWindow = (scanX, scanY,
                                 scanX + gridSize*(self._scanGrid[0]-1),
                                 scanY + gridSize*(self._scanGrid[1]-1))
-
         self.font = ImageFont.truetype("./ScannerApp/arial.ttf", 26)
         # self.contrast = 100
         # self.brightness = 50
@@ -219,12 +222,10 @@ class Camera(PiCamera):
                     self.remove_overlay(self.overlay)
                     self.overlay = None
                 
-         
     def indexToName(self, idx):
         return indexToGridName(idx, grid=self._scanGrid, direction=self.direction)
 
 
 if __name__ == '__main__':
-
     c = Camera()
     c.manualRun()

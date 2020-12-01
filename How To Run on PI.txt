@@ -20,6 +20,9 @@ https://www.pyimagesearch.com/2019/09/16/install-opencv-4-on-raspberry-pi-4-and-
 
 
 
+
+
+change mouse cursor hide.
 https://www.raspberrypi.org/forums/viewtopic.php?t=234879
 
 One option would be to install unclutter.
@@ -35,3 +38,12 @@ The mouse pointer will appear when moved.
 The command can be put in autostart
 
 /etc/xdg/lxsession/LXDE-pi/autostart
+
+
+
+mouse double click speed:
+https://www.raspberrypi.org/forums/viewtopic.php?t=28823
+{
+  echo 'gtk-double-click-time=500'
+  echo 'gtk-double-click-distance=20'
+} > .gtkrc-2.0.mine

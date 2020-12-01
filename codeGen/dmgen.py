@@ -1,8 +1,8 @@
-from pylibdmtx.pylibdmtx import encode
+from pylibdmtx.pylibdmtx import encode,decode
 import random
 import cv2
 import numpy as np
-
+from PIL import ImageOps,Image
 import matplotlib.pyplot as plt
  
 
